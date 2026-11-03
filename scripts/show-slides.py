@@ -54,7 +54,7 @@ THEMES = [
    "Every source you connect adds more to choose from, and the choosing is yours.",
    "The more of the system you own, the more of these decisions you own."]),
  ("21-part6-same-model", "PART 6: SAME MODEL", "Same question. Same model. Engineered context.",
-  [("14", "Final", "See the answer on your phone. Model unchanged."),
+  [("14", "Final", "See the answer on your device. Model unchanged."),
    ("15", "Close", "Read the definition. The event log replays.")],
   ["Better context can change behavior without changing the model.",
    "Context engineering is how we choose and maintain the information available to an assistant as it works."]),
@@ -63,7 +63,7 @@ LESSON_STEMS = {"07-part1-one-assistant": "08-part1-lessons", "09-part2-a-real-s
                 "11-part3-wrong-context": "12-part3-lessons", "13-part4-beyond-the-window": "14-part4-lessons",
                 "15-part5-who-runs-the-machinery": "19-part5-lessons", "21-part6-same-model": "22-part6-lessons"}
 LEGEND = dict(eyebrow="LIVE: HOW TO READ THE SCREEN", title="You are about to run a context window.",
-  sub="No phone needed. Watch the screen. A slide sets up each part, then the room runs it live.",
+  sub="No device needed. Watch the screen. A slide sets up each part, then the room runs it live.",
   cards=[("Card", "One piece of information the assistant could see. X-ray shows its source, age and authority."),
          ("Unit", "What a card costs. The window has a budget, and the room goes over it more than once."),
          ("Window", "The cards the assistant actually sees when it answers. Everything else is invisible to it."),
