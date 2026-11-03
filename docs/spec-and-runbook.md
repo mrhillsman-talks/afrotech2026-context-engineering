@@ -361,7 +361,8 @@ thread, the color preference or the malicious retrieved instructions.
 
 ## 6. Application surfaces
 
-One Node process serves five surfaces. The client code is under `client/src`.
+One Node process serves five surfaces. The client code is under `client/src`. Screenshots of
+each are in the README and under `docs/img/`.
 
 ### A. Participant application
 

@@ -67,6 +67,39 @@ is how we choose and maintain the information available to an assistant as it wo
 four questions every context decision answers: what gets in, how it is represented, what stays, and
 who decides.
 
+## Surfaces
+
+One Node process serves five surfaces. The room below is preset 04 Crowd managed with 80 simulated
+participants, X-ray on; the phone is at preset 01 Solo.
+
+<table>
+  <tr>
+    <td colspan="2">
+      <img src="docs/img/display.png" alt="Projected display at preset 04: the active context over budget at 389 of 300 units, cards with their X-ray labels, the cards that cannot enter, and the room's relevance credits per card">
+      <br><sub><b>Projected display.</b> The window, its overflow, every card's source, scope, age, authority and trust, the cards kept out, and the room's credits.</sub>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2">
+      <img src="docs/img/console.png" alt="Speaker console: talk clock, slide strip, the active context with per-card Pin, Sum, Full, Quar and Evict buttons, phase presets, simulate, renderer choice, the run sheet strip and the toolbar">
+      <br><sub><b>Speaker console.</b> Talk clock, slides, one row per card, presets, Simulate, renderer, run sheet and the toolbar; every key in the footer.</sub>
+    </td>
+  </tr>
+  <tr>
+    <td width="30%" valign="top">
+      <img src="docs/img/participant.png" alt="Participant phone at preset 01 Solo: the task, an 80-unit meter at 66, six cards with three selected">
+      <br><sub><b>Participant.</b> Preset 01: pick cards within 80 units, then run your own assistant.</sub>
+    </td>
+    <td valign="top">
+      <img src="docs/img/facilitator.png" alt="Facilitator view: connections, duplicate sessions, event rate, stuck clients, model API, WebSocket, state version, fallback, participants by phase and recent events">
+      <br><sub><b>Facilitator view.</b> Read-only health of the room for a second person.</sub>
+      <br><br>
+      <img src="docs/img/notes.png" alt="Speaker notes view: the note for run sheet step 16 beside a live frame of the display">
+      <br><sub><b>Notes view.</b> The note for the run sheet's current step beside the display.</sub>
+    </td>
+  </tr>
+</table>
+
 ## Documents
 
 | Document | Contents |
