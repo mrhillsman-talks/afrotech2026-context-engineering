@@ -1,5 +1,12 @@
 # Context Window Live
 
+[![Node 20 or later](https://img.shields.io/badge/node-%E2%89%A5%2020-339933?logo=node.js&logoColor=white)](package.json)
+[![TypeScript 5](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)](shared/tsconfig.json)
+[![React 18 with Vite 6](https://img.shields.io/badge/React%2018-Vite%206-646CFF?logo=vite&logoColor=white)](client/package.json)
+[![Runs offline](https://img.shields.io/badge/runs-offline-1c403e)](#configuration)
+[![Deploys to OpenShift](https://img.shields.io/badge/deploy-OpenShift-EE0000?logo=redhatopenshift&logoColor=white)](deploy/openshift/README.md)
+[![Context Window Architecture, draft specification](https://img.shields.io/badge/Context%20Window%20Architecture-draft%20spec-9aff36?labelColor=1c403e)](https://contextwindowarchitecture.io)
+
 Context Window Live is the audience application for the talk *Context Engineering: AI productivity
 in your day to day*. It is for the speaker who runs the talk and for anyone who runs or adapts it.
 
@@ -23,6 +30,38 @@ Every assistant run is deterministic by default: scripted answers keyed on which
 window, a trace per card, and an eval of required facts and forbidden dependencies. A live model is
 optional and falls back to the scripted answer.
 
+![The pipeline the room operates: information environment, context engineering stages, active context, model](docs/img/context-pipeline.svg)
+
+<details>
+<summary>Diagram source (Mermaid)</summary>
+
+```mermaid
+flowchart LR
+  subgraph env["Information environment"]
+    direction TB
+    conv["Conversation"]
+    files["Files"]
+    mem["Memory"]
+    conn["Connectors"]
+    tools["Tools"]
+    web["Web page"]
+  end
+  subgraph ce["Context engineering"]
+    direction TB
+    p["permission"] --> s["scope"] --> t["trust"] --> r["retrieval"] --> ra["relevance · age · authority"] --> c["compression"] --> b["budget packing"]
+  end
+  subgraph win["Active context · 287 / 300 units"]
+    direction TB
+    a1["Customer contract"]
+    a2["Infrastructure health"]
+    a3["Approval procedure"]
+  end
+  env --> ce --> win --> model["Model, unchanged"]
+  ce -. "quarantined" .-> q["Vendor page"]
+```
+
+</details>
+
 The outcome the talk is built for: the audience leaves with one definition, that context engineering
 is how we choose and maintain the information available to an assistant as it works, and with the
 four questions every context decision answers: what gets in, how it is represented, what stays, and
@@ -39,6 +78,16 @@ who decides.
 | `notes/speaker-notes.md` | One note per run sheet step, shown in the notes view |
 | `slides/README.md` | The slide deck: file order, generation, Google Slides export |
 | `deploy/openshift/README.md` | Deploying to OpenShift |
+
+## Context Window Architecture
+
+Part 6 of the talk introduces [Context Window Architecture](https://contextwindowarchitecture.io),
+a draft specification for the decisions this app has the room make by hand: four planes
+(governance, state, evidence, interaction), a label on every item that enters the window, and a
+trace of every assembly. The app's cards, filters and Context Inspector follow that shape; the app
+does not implement the specification. Slide 20 presents it, and `docs/speaker-qa-backup.md` holds
+the talk's claims about it with their sources, the
+[specification](https://contextwindowarchitecture.io/spec.html) among them.
 
 ## Quick start
 

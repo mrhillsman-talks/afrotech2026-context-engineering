@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 440" width="1200" height="440" role="img" aria-labelledby="t d">
+  <title id="t">Context Window Live: the pipeline the room operates</title>
+  <desc id="d">Information from conversation, files, memory, connectors, tools and a web page passes through permission, scope, trust, retrieval, relevance and age, compression and budget stages into a 300-unit active context that holds the contract, infrastructure health and the approval procedure; the vendor page is quarantined; the model is unchanged.</desc>
+  <style>
+    text { font-family: "Funnel Sans", system-ui, -apple-system, "Segoe UI", sans-serif; fill: #edf3f3; }
+    .h { font-weight: 700; font-size: 15px; letter-spacing: .08em; fill: #c0e8d2; }
+    .s { font-size: 14px; }
+    .m { font-size: 12px; fill: #c0e8d2; }
+    .k text, text.k { font-size: 13px; fill: #1c403e; font-weight: 600; }
+    .lime { fill: #9aff36; }
+    .box { fill: #1c5a45; stroke: #64dc7b; stroke-width: 1.5; }
+    .chip { fill: #edf3f3; }
+    .stage { fill: #1c403e; stroke: #c0e8d2; stroke-width: 1; }
+    .card { fill: #edf3f3; }
+    .arrow { stroke: #9aff36; stroke-width: 2.5; fill: none; marker-end: url(#a); }
+    .down { stroke: #c0e8d2; stroke-width: 1.5; fill: none; marker-end: url(#b); }
+    .q { fill: #5c1a14; stroke: #ff7a70; stroke-width: 1.5; }
+  </style>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0L10 5L0 10z" fill="#9aff36"/></marker>
+    <marker id="b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#c0e8d2"/></marker>
+  </defs>
+  <rect width="1200" height="440" rx="18" fill="#1c403e"/>
+
+  <!-- Information environment -->
+  <rect x="36" y="56" width="300" height="300" rx="14" class="box"/>
+  <text x="58" y="88" class="h">INFORMATION ENVIRONMENT</text>
+  <g class="k">
+    <rect x="58" y="108" width="120" height="34" rx="8" class="chip"/><text x="118" y="130" text-anchor="middle">Conversation</text>
+    <rect x="190" y="108" width="120" height="34" rx="8" class="chip"/><text x="250" y="130" text-anchor="middle">Files</text>
+    <rect x="58" y="154" width="120" height="34" rx="8" class="chip"/><text x="118" y="176" text-anchor="middle">Memory</text>
+    <rect x="190" y="154" width="120" height="34" rx="8" class="chip"/><text x="250" y="176" text-anchor="middle">Connectors</text>
+    <rect x="58" y="200" width="120" height="34" rx="8" class="chip"/><text x="118" y="222" text-anchor="middle">Tools</text>
+    <rect x="190" y="200" width="120" height="34" rx="8" class="chip"/><text x="250" y="222" text-anchor="middle">Web page</text>
+  </g>
+  <text x="58" y="276" class="s">21 cards: relevant, stale, private,</text>
+  <text x="58" y="296" class="s">off-scope and one injection.</text>
+  <text x="58" y="326" class="m">The audience supplies, ranks</text>
+  <text x="58" y="342" class="m">and compresses them.</text>
+
+  <!-- Context engineering -->
+  <rect x="396" y="24" width="300" height="392" rx="14" class="box"/>
+  <text x="418" y="56" class="h">CONTEXT ENGINEERING</text>
+  <g class="s">
+    <rect x="446" y="74" width="200" height="30" rx="7" class="stage"/><text x="546" y="94" text-anchor="middle">permission</text>
+    <path d="M546 104v12" class="down"/>
+    <rect x="446" y="120" width="200" height="30" rx="7" class="stage"/><text x="546" y="140" text-anchor="middle">scope</text>
+    <path d="M546 150v12" class="down"/>
+    <rect x="446" y="166" width="200" height="30" rx="7" class="stage"/><text x="546" y="186" text-anchor="middle">trust</text>
+    <path d="M546 196v12" class="down"/>
+    <rect x="446" y="212" width="200" height="30" rx="7" class="stage"/><text x="546" y="232" text-anchor="middle">retrieval</text>
+    <path d="M546 242v12" class="down"/>
+    <rect x="446" y="258" width="200" height="30" rx="7" class="stage"/><text x="546" y="278" text-anchor="middle">relevance · age · authority</text>
+    <path d="M546 288v12" class="down"/>
+    <rect x="446" y="304" width="200" height="30" rx="7" class="stage"/><text x="546" y="324" text-anchor="middle">compression</text>
+    <path d="M546 334v12" class="down"/>
+    <rect x="446" y="350" width="200" height="30" rx="7" class="stage"/><text x="546" y="370" text-anchor="middle">budget packing</text>
+  </g>
+  <text x="546" y="404" text-anchor="middle" class="m">Every stage is a switch on the speaker console.</text>
+
+  <!-- Active context -->
+  <rect x="756" y="56" width="300" height="300" rx="14" class="box"/>
+  <text x="778" y="88" class="h">ACTIVE CONTEXT</text>
+  <rect x="778" y="102" width="256" height="12" rx="6" fill="#143531"/>
+  <rect x="778" y="102" width="245" height="12" rx="6" fill="#64dc7b"/>
+  <text x="778" y="134" class="s"><tspan class="lime" font-weight="700">287</tspan> / 300 units</text>
+  <g class="k">
+    <rect x="778" y="150" width="256" height="34" rx="8" class="card"/><text x="792" y="172">Customer contract</text><text x="1020" y="172" text-anchor="end">30 u</text>
+    <rect x="778" y="194" width="256" height="34" rx="8" class="card"/><text x="792" y="216">Infrastructure health</text><text x="1020" y="216" text-anchor="end">27 u</text>
+    <rect x="778" y="238" width="256" height="34" rx="8" class="card"/><text x="792" y="260">Approval procedure</text><text x="1020" y="260" text-anchor="end">9 u</text>
+  </g>
+  <rect x="778" y="292" width="256" height="34" rx="8" class="q"/>
+  <text x="792" y="314" class="s" fill="#ffb3ab">Vendor page</text>
+  <text x="1020" y="314" text-anchor="end" class="s" fill="#ffb3ab">quarantined</text>
+
+  <!-- Model -->
+  <rect x="1096" y="166" width="80" height="80" rx="14" fill="#9aff36"/>
+  <text x="1136" y="200" text-anchor="middle" class="k" font-size="15">MODEL</text>
+  <text x="1136" y="222" text-anchor="middle" class="k" font-size="11">unchanged</text>
+
+  <!-- Flow arrows -->
+  <path d="M336 206H392" class="arrow"/>
+  <path d="M696 206H752" class="arrow"/>
+  <path d="M1056 206H1092" class="arrow"/>
+</svg>

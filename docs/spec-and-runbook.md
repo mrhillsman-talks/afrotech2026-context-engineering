@@ -8,6 +8,66 @@ the evals. Sections 49 to 57 record what is built, the rehearsal protocol and th
 Section numbers are referenced from the code, the cheat sheet and the transcript, so they do not
 change.
 
+### Contents
+
+- [1. Thesis](#1-thesis)
+- [2. Core metaphor](#2-core-metaphor)
+- [3. Fictional scenario](#3-fictional-scenario)
+- [4. Canonical Atlas dataset](#4-canonical-atlas-dataset)
+- [5. Expected well-grounded final answer](#5-expected-well-grounded-final-answer)
+- [6. Application surfaces](#6-application-surfaces)
+- [7. Registration](#7-registration)
+- [8. Session modes](#8-session-modes)
+- [9. Context object model](#9-context-object-model)
+- [10. Context window representation](#10-context-window-representation)
+- [11. Context operations](#11-context-operations)
+- [12. Speaker-controlled context policy](#12-speaker-controlled-context-policy)
+- [13. Scoring](#13-scoring)
+- [14. Audience relevance credits](#14-audience-relevance-credits)
+- [15. Secret roles](#15-secret-roles)
+- [16. Free-text participation](#16-free-text-participation)
+- [17. Deterministic assistant engine](#17-deterministic-assistant-engine)
+- [18. Live LLM adapter](#18-live-llm-adapter)
+- [19. Live LLM controls](#19-live-llm-controls)
+- [20. Phase presets](#20-phase-presets)
+- [21. Forty-minute speaker walkthrough](#21-forty-minute-speaker-walkthrough)
+- [22. Context Inspector](#22-context-inspector)
+- [23. Context timeline](#23-context-timeline)
+- [24. X-ray mode](#24-x-ray-mode)
+- [25. Speaker console: toolbar, keys, run sheet and notes view](#25-speaker-console-toolbar-keys-run-sheet-and-notes-view)
+- [26. Offline demo mode](#26-offline-demo-mode)
+- [27. Technical architecture](#27-technical-architecture)
+- [28. State synchronization](#28-state-synchronization)
+- [29. Concurrency targets](#29-concurrency-targets)
+- [30. Speaker state machine](#30-speaker-state-machine)
+- [31. Visual design language](#31-visual-design-language)
+- [32. Context pressure](#32-context-pressure)
+- [33. Distinction: environment versus context](#33-distinction-environment-versus-context)
+- [34. Distinction: context versus memory](#34-distinction-context-versus-memory)
+- [35. Distinction: history versus context](#35-distinction-history-versus-context)
+- [36. Distinction: tools versus context](#36-distinction-tools-versus-context)
+- [37. Distinction: retrieval versus context](#37-distinction-retrieval-versus-context)
+- [38. Buy / Blend / Build responsibility matrix](#38-buy--blend--build-responsibility-matrix)
+- [39. Optional activity: context corruption](#39-optional-activity-context-corruption)
+- [40. Optional activity: context provenance challenge](#40-optional-activity-context-provenance-challenge)
+- [41. Optional activity: recency challenge](#41-optional-activity-recency-challenge)
+- [42. Optional activity: context poisoning through repetition](#42-optional-activity-context-poisoning-through-repetition)
+- [43. Optional activity: semantic retrieval failure](#43-optional-activity-semantic-retrieval-failure)
+- [44. Optional activity: multi-agent context](#44-optional-activity-multi-agent-context)
+- [45. Optional activity: structured context](#45-optional-activity-structured-context)
+- [46. Optional activity: semantic routing](#46-optional-activity-semantic-routing)
+- [47. Evaluation hooks](#47-evaluation-hooks)
+- [48. Speaker statement for evals](#48-speaker-statement-for-evals)
+- [49. What is built](#49-what-is-built)
+- [50. Added after the MVP, and what is not built](#50-added-after-the-mvp-and-what-is-not-built)
+- [51. Rehearsal protocol](#51-rehearsal-protocol)
+- [52. Things not to make live dependencies](#52-things-not-to-make-live-dependencies)
+- [53. Design principle for every interaction](#53-design-principle-for-every-interaction)
+- [54. The underlying conceptual model](#54-the-underlying-conceptual-model)
+- [55. One-line lessons produced by each demo](#55-one-line-lessons-produced-by-each-demo)
+- [56. The talk's progression](#56-the-talks-progression)
+- [57. Final design requirement](#57-final-design-requirement)
+
 ## 1. Thesis
 
 The talk teaches one definition:
@@ -484,6 +544,8 @@ states cover the same beats on stage.
 
 ## 12. Speaker-controlled context policy
 
+![The pipeline: information environment, context engineering stages, active context, model](img/context-pipeline.svg)
+
 The deterministic context assembler runs these stages in order:
 
 ```text
@@ -510,6 +572,36 @@ ASSISTANT
 
 Every stage can be toggled on the console, so a protection can be turned off on purpose and the
 failure shown before it is turned on.
+
+<details>
+<summary>Diagram source (Mermaid)</summary>
+
+```mermaid
+flowchart LR
+  subgraph env["Information environment"]
+    direction TB
+    conv["Conversation"]
+    files["Files"]
+    mem["Memory"]
+    conn["Connectors"]
+    tools["Tools"]
+    web["Web page"]
+  end
+  subgraph ce["Context engineering"]
+    direction TB
+    p["permission"] --> s["scope"] --> t["trust"] --> r["retrieval"] --> ra["relevance · age · authority"] --> c["compression"] --> b["budget packing"]
+  end
+  subgraph win["Active context · 287 / 300 units"]
+    direction TB
+    a1["Customer contract"]
+    a2["Infrastructure health"]
+    a3["Approval procedure"]
+  end
+  env --> ce --> win --> model["Model, unchanged"]
+  ce -. "quarantined" .-> q["Vendor page"]
+```
+
+</details>
 
 ## 13. Scoring
 
