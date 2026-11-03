@@ -1,0 +1,69 @@
+# The Route's certificate from cert-manager, applied by deploy.sh with CERT_MANAGER=1.
+# cert-manager writes the certificate and key to the secret <NAME>-tls and renews it there. The Route names that
+# secret in spec.tls.externalCertificate, and the router reads it itself, so a renewal reaches the Route without a
+# deploy. That needs the router's service account to be allowed to read the secret: the Role and RoleBinding below.
+# By hand:
+#   oc process --local -f deploy/openshift/tls.yaml -p ROUTE_HOST=<host> [-p NAME=... -p CERT_ISSUER=...] | oc apply -f -
+apiVersion: template.openshift.io/v1
+kind: Template
+metadata:
+  name: ctx-audience-app-tls
+# The deployed set's label; the key must match SET_LABEL_KEY in deploy.sh. The Certificate names it again in
+# secretTemplate, because the secret is created by cert-manager, not by `oc process`.
+labels:
+  app: ${NAME}
+  ctx-audience-app/deployed-set: ${NAME}
+parameters:
+- name: NAME
+  description: The same NAME as the app. The certificate and its secret are <NAME>-tls.
+  value: ctx-audience-app
+- name: ROUTE_HOST
+  description: The hostname the certificate is for; the Route's host.
+  required: true
+- name: CERT_ISSUER
+  description: The cert-manager issuer that signs the certificate; the project's Let's Encrypt Issuer by default.
+  value: letsencrypt
+- name: CERT_ISSUER_KIND
+  description: Issuer, for one in the same project, or ClusterIssuer.
+  value: Issuer
+objects:
+- apiVersion: cert-manager.io/v1
+  kind: Certificate
+  metadata:
+    name: ${NAME}-tls
+  spec:
+    secretName: ${NAME}-tls
+    secretTemplate:
+      labels:
+        ctx-audience-app/deployed-set: ${NAME}
+    dnsNames:
+    - ${ROUTE_HOST}
+    issuerRef:
+      kind: ${CERT_ISSUER_KIND}
+      name: ${CERT_ISSUER}
+    privateKey:
+      algorithm: ECDSA
+      size: 256
+      # A new key with every renewal.
+      rotationPolicy: Always
+- apiVersion: rbac.authorization.k8s.io/v1
+  kind: Role
+  metadata:
+    name: ${NAME}-tls-router
+  rules:
+  - apiGroups: [""]
+    resources: ["secrets"]
+    resourceNames: ["${NAME}-tls"]
+    verbs: ["get", "list", "watch"]
+- apiVersion: rbac.authorization.k8s.io/v1
+  kind: RoleBinding
+  metadata:
+    name: ${NAME}-tls-router
+  roleRef:
+    apiGroup: rbac.authorization.k8s.io
+    kind: Role
+    name: ${NAME}-tls-router
+  subjects:
+  - kind: ServiceAccount
+    name: router
+    namespace: openshift-ingress

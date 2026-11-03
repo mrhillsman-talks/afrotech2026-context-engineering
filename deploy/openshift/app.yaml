@@ -1,0 +1,180 @@
+# Context Window Live on OpenShift: a Template of the runtime objects.
+# deploy/openshift/deploy.sh renders it with oc process, drops the parameters left empty (so the cluster
+# applies its own defaults) and applies the result. By hand:
+#   oc process --local -f deploy/openshift/app.yaml -p IMAGE=<ref> [-p NAME=... -p ROUTE_HOST=... ...] | oc apply -f -
+apiVersion: template.openshift.io/v1
+kind: Template
+metadata:
+  name: ctx-audience-app
+# The deployed set's label. `oc process` adds a Template's labels to every object below, so each one carries it
+# and the whole set can be listed and removed by it:
+#   oc delete deployment,service,route,pvc,secret -l ctx-audience-app/deployed-set=<NAME>
+# deploy.sh adds the same label to everything it applies; it is named here too so that applying this file by hand
+# gives the same result. The key must match SET_LABEL_KEY in deploy.sh, here and in the pod template below.
+# An object added under `objects:` gets the label with no further change. If it is a new kind, add the kind to
+# the kinds lists in deploy.sh, or `deploy.sh delete` will not remove it.
+labels:
+  ctx-audience-app/deployed-set: ${NAME}
+parameters:
+- name: NAME
+  description: Name of the Deployment, Service, Route and volume claim; the secret is <NAME>-secrets. Two names run two independent rooms in one project.
+  value: ctx-audience-app
+- name: IMAGE
+  description: Image the Deployment runs. deploy.sh builds and tags it.
+  required: true
+- name: PUBLIC_URL
+  description: URL the QR code points to. Empty means deploy.sh sets it from the Route once the Route exists.
+- name: SHORT_URL
+  description: Text the lobby prints under the QR code instead of the site root, e.g. a short link. Display only. Empty means the site root.
+- name: ROUTE_HOST
+  description: Hostname of the Route. Empty means the cluster generates <NAME>-<project>.<apps domain>.
+- name: ROUTE_PATH
+  description: Path prefix the Route matches and the app serves under, e.g. /talk. Empty means the whole host.
+- name: ROUTE_TIMEOUT
+  description: HAProxy timeout for the Route. WebSockets idle between phases, so keep it long.
+  value: 1h
+- name: ROUTE_TLS_CERTIFICATE
+  description: PEM certificate for the Route's edge TLS. Empty means the router's own certificate.
+- name: ROUTE_TLS_KEY
+  description: PEM private key for ROUTE_TLS_CERTIFICATE.
+- name: ROUTE_TLS_CA_CERTIFICATE
+  description: PEM chain for ROUTE_TLS_CERTIFICATE, when the issuer is not in the router's trust store.
+- name: ROUTE_TLS_SECRET
+  description: TLS secret the router reads the Route's certificate from (cert-manager's, see tls.yaml). Replaces the three above. Empty means none.
+- name: NOTES_READONLY
+  description: 1 turns saving speaker notes off; the notes view still shows the notes/speaker-notes.md built into the image. 0 turns saving on, into the container's copy, which the next deploy or pod restart replaces.
+  value: "1"
+- name: STORAGE_CLASS
+  description: StorageClass of the data volume. Empty means the cluster's default class. Fixed once the claim exists.
+- name: STORAGE_SIZE
+  description: Size of the data volume, which holds the snapshot, event log and exports. Fixed once the claim exists.
+  value: 1Gi
+- name: CPU_REQUEST
+  value: 100m
+- name: MEMORY_REQUEST
+  value: 128Mi
+- name: CPU_LIMIT
+  value: "1"
+- name: MEMORY_LIMIT
+  value: 512Mi
+objects:
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    name: ${NAME}-data
+    labels:
+      app: ${NAME}
+  spec:
+    accessModes: ["ReadWriteOnce"]
+    storageClassName: ${STORAGE_CLASS}
+    resources:
+      requests:
+        storage: ${STORAGE_SIZE}
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    name: ${NAME}
+    labels:
+      app: ${NAME}
+  spec:
+    # The store is in-memory: exactly one replica, and Recreate so two pods never own the room.
+    replicas: 1
+    strategy:
+      type: Recreate
+    selector:
+      matchLabels:
+        app: ${NAME}
+    template:
+      metadata:
+        # A Template's labels reach the objects, not the pod template inside one, so the set's label is named
+        # again here. The ReplicaSets and pods take it from here. `app` is what the Deployment and the Service
+        # select pods by; a Deployment's selector cannot be changed after it is created, so leave `app` as it is.
+        labels:
+          app: ${NAME}
+          ctx-audience-app/deployed-set: ${NAME}
+      spec:
+        containers:
+        - name: app
+          image: ${IMAGE}
+          ports:
+          - containerPort: 3000
+          env:
+          - name: PORT
+            value: "3000"
+          - name: PUBLIC_URL
+            value: ${PUBLIC_URL}
+          - name: SHORT_URL
+            value: ${SHORT_URL}
+          # The app serves itself under the Route's path, whatever PUBLIC_URL says.
+          - name: BASE_PATH
+            value: ${ROUTE_PATH}
+          - name: NOTES_READONLY
+            value: ${NOTES_READONLY}
+          envFrom:
+          - secretRef:
+              name: ${NAME}-secrets
+          volumeMounts:
+          - name: data
+            mountPath: /app/data
+          readinessProbe:
+            httpGet:
+              path: "${ROUTE_PATH}/api/health"
+              port: 3000
+            initialDelaySeconds: 3
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: "${ROUTE_PATH}/api/health"
+              port: 3000
+            initialDelaySeconds: 10
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: ${CPU_REQUEST}
+              memory: ${MEMORY_REQUEST}
+            limits:
+              cpu: ${CPU_LIMIT}
+              memory: ${MEMORY_LIMIT}
+        volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: ${NAME}-data
+- apiVersion: v1
+  kind: Service
+  metadata:
+    name: ${NAME}
+    labels:
+      app: ${NAME}
+  spec:
+    selector:
+      app: ${NAME}
+    ports:
+    - name: http
+      port: 3000
+      targetPort: 3000
+- apiVersion: route.openshift.io/v1
+  kind: Route
+  metadata:
+    name: ${NAME}
+    labels:
+      app: ${NAME}
+    annotations:
+      # WebSocket connections idle between phases; keep the router from cutting them.
+      haproxy.router.openshift.io/timeout: ${ROUTE_TIMEOUT}
+  spec:
+    host: ${ROUTE_HOST}
+    path: ${ROUTE_PATH}
+    to:
+      kind: Service
+      name: ${NAME}
+    port:
+      targetPort: http
+    tls:
+      termination: edge
+      insecureEdgeTerminationPolicy: Redirect
+      # Left out when empty: deploy.sh drops the key once its name is gone, so clusters without the field accept the Route.
+      externalCertificate:
+        name: ${ROUTE_TLS_SECRET}
+      certificate: ${ROUTE_TLS_CERTIFICATE}
+      key: ${ROUTE_TLS_KEY}
+      caCertificate: ${ROUTE_TLS_CA_CERTIFICATE}

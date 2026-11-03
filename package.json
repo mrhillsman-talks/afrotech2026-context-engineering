@@ -1,0 +1,31 @@
+{
+  "name": "ctx-audience-app",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Context Engineering interactive talk: audience becomes the context window",
+  "workspaces": [
+    "shared",
+    "server",
+    "client"
+  ],
+  "scripts": {
+    "dev": "concurrently -n server,client -c green,cyan \"npm run dev -w server\" \"npm run dev -w client\"",
+    "build": "npm run build -w client",
+    "start": "npm run start -w server",
+    "typecheck": "npm run typecheck -w shared && npm run typecheck -w server && npm run typecheck -w client",
+    "fresh": "npm run start -w server -- --fresh",
+    "test": "npm run test -w shared && npm run test -w server",
+    "cheatsheet": "tsx scripts/cheatsheet.ts",
+    "notes:draft": "tsx scripts/notes-from-script.ts",
+    "gslides:notes": "tsx scripts/google-slides-notes.ts",
+    "slides": "python scripts/show-slides.py"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2",
+    "typescript": "^5.7.3",
+    "tsx": "^4.19.2"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

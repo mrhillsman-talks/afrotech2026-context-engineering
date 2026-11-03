@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Context Window Live · speaker cheat sheet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&family=Funnel+Sans:ital,wght@0,300..800;1,300..800&display=swap">
+<style>
+@page { size: letter landscape; margin: 10mm; }
+body { font: 9.5px/1.3 "Funnel Sans", system-ui, sans-serif; color: #1c403e; margin: 0; padding: 10px 14px; background: #fff; }
+.mast { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin: 0 0 8px; padding-bottom: 6px; border-bottom: 1px solid #1c403e; }
+h1 { font: 500 20px/1 "Funnel Display", "Funnel Sans", sans-serif; margin: 0; }
+h1 small { font-size: 12px; font-weight: 400; color: #4f6a67; margin-left: 8px; letter-spacing: .02em; }
+.mast .m { color: #4f6a67; font-size: 8.5px; text-transform: uppercase; letter-spacing: .06em; }
+h2 { font: 500 13px/1 "Funnel Display", "Funnel Sans", sans-serif; margin: 12px 0 5px; color: #167e3c; text-transform: uppercase; letter-spacing: .06em; }
+.strip { display: grid; grid-template-columns: 1.15fr 1fr 1.05fr 1.2fr; gap: 0; background: #edf3f3; border-radius: 6px; margin-bottom: 8px; }
+.strip > div { padding: 7px 10px; border-left: 1px solid #fff; }
+.strip > div:first-child { border-left: 0; }
+.strip b { display: block; font-size: 8.5px; text-transform: uppercase; letter-spacing: .06em; color: #167e3c; margin-bottom: 4px; }
+.strip ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px 8px; }
+.strip .hot { grid-template-columns: max-content 1fr; }
+.strip .hot.two { grid-template-columns: max-content 1fr max-content 1fr; }
+.strip li { display: contents; }
+.strip p { margin: 0 0 3px; }
+.strip p:last-child { margin-bottom: 0; }
+.strip .btns { display: flex; flex-wrap: wrap; gap: 3px; }
+.strip .btns span { border: 1px solid #95a6a2; border-radius: 3px; padding: 0 5px; font-size: 8.5px; line-height: 1.6; background: #fff; white-space: nowrap; }
+.strip .btns .red { border-color: #b23b3b; color: #b23b3b; }
+.strip .btns .adv { border-color: #1c403e; background: #1c403e; color: #c9f36b; font-weight: 700; }
+.strip .fine { color: #4f6a67; font-size: 8.5px; }
+kbd { display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; font: 700 8px/1 "Funnel Sans", system-ui, sans-serif; color: #1c403e; background: #fff; border: 1px solid #95a6a2; border-bottom-width: 2px; border-radius: 3px; padding: 0; white-space: nowrap; vertical-align: middle; overflow: visible; }
+.strip kbd { width: 16px; height: 16px; }
+.strip kbd.multi { width: 32px; height: 16px; }
+table { width: 100%; border-collapse: collapse; page-break-inside: auto; }
+thead { display: table-header-group; }
+th { position: sticky; top: 0; z-index: 2; background: #fff; text-align: left; font-size: 8.5px; text-transform: uppercase; letter-spacing: .05em; color: #167e3c; box-shadow: inset 0 -1px 0 #1c403e; padding: 3px 5px; }
+td { vertical-align: top; padding: 4px 5px; border-bottom: .5px solid #95a6a2; }
+tr { page-break-inside: avoid; }
+.code { font-weight: 700; white-space: nowrap; }
+.t { font-weight: 400; color: #4f6a67; }
+.s { color: #4f6a67; font-size: 8.5px; }
+.lesson { font-style: italic; }
+.part td { position: sticky; top: var(--thead-h, 17px); z-index: 1; background: #edf3f3; padding: 5px; border-bottom: 0; box-shadow: 0 1px 0 #95a6a2; }
+.part b { color: #167e3c; text-transform: uppercase; letter-spacing: .05em; font-size: 8.5px; margin-right: 8px; }
+.run { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 3px 4px; vertical-align: middle; }
+.cue { display: inline-flex; align-items: center; gap: 4px; border-radius: 3px; padding: 1px 5px; font-size: 8.5px; line-height: 1.4; white-space: nowrap; }
+.cue.slide { background: #fff; border: 1px solid #167e3c; color: #1c403e; }
+.cue.slide i { font-style: normal; font-weight: 700; color: #fff; background: #167e3c; border-radius: 2px; padding: 0 3px; min-width: 8px; text-align: center; }
+.cue.live { background: #1c403e; border: 1px solid #1c403e; color: #c9f36b; font-weight: 700; letter-spacing: .04em; }
+.arr { color: #4f6a67; margin: 0 1px; }
+.note { display: inline-block; color: #4f6a67; margin-left: 8px; vertical-align: middle; }
+.key { margin: 0 0 6px; padding: 6px 8px; border: 1px solid #95a6a2; border-radius: 6px; color: #1c403e; }
+.key .cue { vertical-align: middle; margin: 0 2px; }
+.status { font-weight: 700; white-space: nowrap; }
+.opt td:nth-child(1) { white-space: nowrap; }
+.foot { margin-top: 8px; color: #4f6a67; font-size: 8.5px; }
+@media print { body { padding: 0; } th, .part td { position: static; } }
+</style></head><body>
+<header class="mast">
+  <h1 class="title">Context Engineering - AI Productivity in Your Day to Day<small>AfroTech 2026 Run Sheet</small></h1>
+  <span class="m">21 presets · 25 slides · 21 cards</span>
+</header>
+<div class="strip">
+  <div><b>Console hotkeys</b>
+    <ul class="hot two">
+      <li><kbd>[</kbd><span>Back to the previous phase.</span><kbd>S</kbd><span>Show or hide the deck.</span></li>
+      <li><kbd>]</kbd><span>Advance to the next phase.</span><kbd>X</kbd><span>Next slide.</span></li>
+      <li><kbd>R</kbd><span>Reset the phase; votes are kept.</span><kbd>Z</kbd><span>Previous slide.</span></li>
+      <li><kbd>F</kbd><span>Freeze or unfreeze the audience.</span><kbd>P</kbd><span>Take the slide down (live view).</span></li>
+      <li><kbd>L</kbd><span>Load the expected state.</span><kbd>T</kbd><span>Start or pause the talk clock.</span></li>
+      <li><kbd>V</kbd><span>X-ray on or off, room-wide.</span><kbd>→</kbd><span>Next step of the run sheet: everything to press before the next spoken line.</span></li>
+      <li><kbd>←</kbd><span>Back one step: reloads the preset, redoes the steps since.</span></li>
+    </ul>
+    <p class="fine" style="margin-top:4px">Keys are ignored while a text field has focus or with Cmd, Ctrl or Alt held; click elsewhere on the console first. Esc does nothing: it would leave full screen.</p>
+    <p class="fine">Notes view, <code>/session/main/notes</code>: the note for the run sheet's current step beside the display. It follows → and ←, presets loaded by hand (click, [, ], R) and slides put up by hand; <kbd>,</kbd> and <kbd>.</kbd> look at other steps' notes without changing the display, <kbd>Home</kbd> returns, <kbd>D</kbd> shows only the note, <kbd>-</kbd> <kbd>+</kbd> <kbd>0</kbd> set its text size; drag the divider to change the widths.</p>
+    <p class="fine">Talk clock, center of the console header: the big figure counts down the part's slot, green, yellow in the last 30 seconds, red when it runs out. A part's setup slide starts its slot. The small line counts the talk to 40:00 beside the part's mark.</p>
+  </div>
+  <div><b>Display hotkeys</b>
+    <ul class="hot">
+      <li><kbd>V</kbd><span>X-ray overlay on this screen only. The console's X-ray also shows here.</span></li>
+      <li><kbd>I</kbd><span>Context Inspector beside an answer.</span></li>
+    </ul>
+    <p class="fine" style="margin-top:4px">Neither key needs the console; click the display window first so it has focus. The console's X-ray also opens the Inspector beside an answer, so the console V covers the whole talk.</p>
+  </div>
+  <div><b>Emergency toolbar</b>
+    <div class="btns"><span>Freeze audience</span><span>Load expected state</span><span>Force good answer</span><span>Force bad answer</span><span class="red">Disable live model</span><span>Reset phase</span><span class="red">End session</span><span class="adv">Advance →</span></div>
+    <p class="fine" style="margin-top:4px">Reset session appears only after End session and starts a fresh room. From an optional activity, Advance returns to the phase you left.</p>
+  </div>
+  <div><b>Renderer and lobby</b>
+    <p>Default is the live model with a deterministic fallback when the model API is configured, otherwise deterministic. A fallback is silent on the display; the console's model API line and the facilitator view show it.</p>
+    <p>Late joiners are parked until the next preset. Admit them early with the "waiting in lobby" chip in the console header.</p>
+  </div>
+</div>
+<h2>Run of show</h2>
+<p class="key">Each part heading is the cue line. <span class="cue slide"><i>n</i>file</span> put that slide on the display: click thumbnail <b>n</b> in the console strip, or step to it with X (next) and Z (back); S shows or hides the deck. <span class="cue live">LIVE 01 · 02</span> take the slide down (P or Live view) and run those presets in order with no slide up. The room keeps running under a slide, so load the next preset while the slide is up and P reveals it.</p>
+<table>
+<thead><tr><th>Preset</th><th>Phase · mode · policy</th><th>Say</th><th>Press</th><th>Audience</th><th>Expect · card state on load</th><th>Lesson</th></tr></thead>
+<tbody><tr class="part"><td colspan="7"><b>Before the talk</b><span class="run"><span class="cue slide"><i>1</i>01-conference</span><span class="arr">→</span><span class="cue live">LIVE 00</span><span class="arr">→</span><span class="cue slide"><i>2</i>02-title</span><span class="arr">→</span><span class="cue slide"><i>3</i>03-base</span><span class="arr">→</span><span class="cue slide"><i>4</i>04-context-window</span><span class="arr">→</span><span class="cue slide"><i>5</i>05-project-atlas</span><span class="arr">→</span><span class="cue slide"><i>6</i>06-how-to-read-the-screen</span><span class="arr">→</span><span class="cue live">LIVE 00</span></span><span class="note">01 while the room fills, then live so the QR and join count show; 02 to 06 from 0:00. → on your first word puts up 02 and starts the clock in one press. 05 sets up Project Atlas and the six parts. Live again after 06 for the last call to join.</span></td></tr>
+<tr>
+  <td class="code">00<br><span class="t">before</span></td>
+  <td><b>Lobby</b><br><span class="s">observer · 400u</span><br><span class="s">all filters off</span></td>
+  <td>The window is on the screen. You are everything that decides what goes in it. Join the room.</td>
+  <td>Nothing. Watch the join count on the console.</td>
+  <td>Scan the QR, register.</td>
+  <td>Display shows QR and 0 / 400 units.<br><span class="s">all available</span></td>
+  <td class="lesson">The window is on the screen. You are everything that decides what goes in it.</td>
+</tr></tbody>
+<tbody><tr class="part"><td colspan="7"><b>Part 1: One assistant, one budget</b><span class="run"><span class="cue slide"><i>7</i>07-part1-one-assistant</span><span class="arr">→</span><span class="cue live">LIVE 01 · 02</span><span class="arr">→</span><span class="cue slide"><i>8</i>08-part1-lessons</span></span></td></tr>
+<tr>
+  <td class="code">01<br><span class="t">3:30</span></td>
+  <td><b>Solo</b><br><span class="s">solo · 400u · solo 80u</span><br><span class="s">all filters off</span></td>
+  <td>First, each of you gets your own assistant. It can't have everything. Choose.</td>
+  <td>Wait for the run count on the display to climb, then ask the room why the answers differ.</td>
+  <td>Pick cards within 80 units, Run assistant.</td>
+  <td>Split of AWS / Azure / Other. "You gave them different worlds."<br><span class="s">all available</span></td>
+  <td class="lesson">The same model behaves differently because it sees a different world.</td>
+</tr>
+<tr>
+  <td class="code">02<br><span class="t">7:00</span></td>
+  <td><b>Context pressure</b><br><span class="s">solo · 400u · solo 45u</span><br><span class="s">all filters off</span></td>
+  <td>New constraint. Your budget just got cut almost in half. Don't think only in terms of deleting.</td>
+  <td>Nothing until people discover Summarize.</td>
+  <td>Keep / Summarize / Remove to fit 45 units, run again.</td>
+  <td>Contract 30 → 11. Ask: is that still the same information?<br><span class="s">all available</span></td>
+  <td class="lesson">You can make room by rewriting information shorter, not just by deleting it.</td>
+</tr></tbody>
+<tbody><tr class="part"><td colspan="7"><b>Part 2: A real system</b><span class="run"><span class="cue slide"><i>9</i>09-part2-a-real-system</span><span class="arr">→</span><span class="cue live">LIVE 03 · 04 · 05</span><span class="arr">→</span><span class="cue slide"><i>10</i>10-part2-lessons</span></span></td></tr>
+<tr>
+  <td class="code">03<br><span class="t">10:00</span></td>
+  <td><b>Shared chaos</b><br><span class="s">shared · 300u</span><br><span class="s">all filters off</span></td>
+  <td>One user is easy. Now a real system. Some of you just received a role.</td>
+  <td>Roles are dealt on entry. Ask the five connectors to send; tell Monitoring, the web page and private memory to hold. X-ray ON once cards are in, and leave it on. Promote or discard staging text.</td>
+  <td>Role holders tap Send. Others may submit one sentence to staging.</td>
+  <td>Cards fly in. X-ray shows source, scope, age, authority on every card.<br><span class="s"><b>active</b> SYS</span></td>
+  <td class="lesson">Real assistants receive information from multiple actors and systems.</td>
+</tr>
+<tr>
+  <td class="code">04<br><span class="t">13:00</span></td>
+  <td><b>Crowd managed</b><br><span class="s">shared · 300u · voting open</span><br><span class="s">useAudienceVotes</span></td>
+  <td>The window is over budget. You now operate it. Spend your relevance credits.</td>
+  <td>Watch credits on the display. Voting open OFF. Invoke assistant. With X-ray on, the Inspector and the checks show beside the answer.</td>
+  <td>Allocate 100 credits. Phone shows the live packing projection.</td>
+  <td>389 / 300 overflow. The vote packs the window. Expect AWS with the checks at FAIL: capacity and approval are not known yet and the private card is in the window. If the room pushed the conversation card out, the vendor page gets in and the answer is GCP. Let it stand.<br><span class="s"><b>active</b> SYS CONV A001 A002 A003 A004 A006 A007 APOLLO A008 A009 PRIV FILE</span></td>
+  <td class="lesson">Someone or something must decide what deserves attention.</td>
+</tr>
+<tr>
+  <td class="code">05<br><span class="t">17:00</span></td>
+  <td><b>Real-time update</b><br><span class="s">observer · 300u · poll</span><br><span class="s">useAudienceVotes</span></td>
+  <td>The world changed. What should happen to our context?</td>
+  <td>Inject ATLAS-005 as soon as the preset loads, so phones show the alert with the poll. Then Inject ATLAS-010.</td>
+  <td>Poll: ignore / add and evict / summarize / retrieve something else.</td>
+  <td>287 / 300 on load, nothing over. The alert ranks high and gets in; the old Slack thread moves to Cannot enter, then the CEO memo when the approval arrives. Maintain, not just find.<br><span class="s"><b>active</b> SYS CONV A001 A002 A003 A004 A006 A007 APOLLO · <b>evicted</b> A008 A009 PRIV FILE</span></td>
+  <td class="lesson">Context must be maintained as reality changes.</td>
+</tr></tbody>
+<tbody><tr class="part"><td colspan="7"><b>Part 3: Right information, wrong context</b><span class="run"><span class="cue slide"><i>11</i>11-part3-wrong-context</span><span class="arr">→</span><span class="cue live">LIVE 06 · 07 · 08</span><span class="arr">→</span><span class="cue slide"><i>12</i>12-part3-lessons</span></span></td></tr>
+<tr>
+  <td class="code">06<br><span class="t">20:00</span></td>
+  <td><b>Scoped</b><br><span class="s">observer · 300u · poll</span><br><span class="s">useAudienceVotes</span></td>
+  <td>Is this true? Should Atlas have it while answering?</td>
+  <td>Toggle Strict project scope ON.</td>
+  <td>Poll yes / no.</td>
+  <td>Apollo slides out of the active window. The problem was scope, not truth.<br><span class="s"><b>active</b> SYS A001 A002 A003 A004 A006 A007 APOLLO A005 A010 · <b>compressed</b> CONV · <b>evicted</b> A008 A009 PRIV FILE</span></td>
+  <td class="lesson">True information can still be wrong context.</td>
+</tr>
+<tr>
+  <td class="code">07<br><span class="t">22:00</span></td>
+  <td><b>Privacy</b><br><span class="s">observer · 300u · poll</span><br><span class="s">projectScope, useAudienceVotes</span></td>
+  <td>This card is Alice's private note. It looks relevant. Should the assistant have it?</td>
+  <td>Permission filter is off on load. Invoke once (answer leaks $80,000). Permission filter ON. Invoke again.</td>
+  <td>Poll yes / no.</td>
+  <td>Eval fails on the leak, then passes. Retrieval asks could this help; authorization asks may this be used.<br><span class="s"><b>active</b> SYS A001 A002 A003 A004 A006 A007 APOLLO PRIV A005 A010 · <b>compressed</b> CONV · <b>evicted</b> A008 A009 FILE</span></td>
+  <td class="lesson">Relevant information can still be off limits.</td>
+</tr>
+<tr>
+  <td class="code">08<br><span class="t">24:00</span></td>
+  <td><b>Trusted</b><br><span class="s">observer · 300u · poll</span><br><span class="s">projectScope, permissionFilter, useAudienceVotes</span></td>
+  <td>We retrieved a page. It contains something that looks like an instruction.</td>
+  <td>Before invoking, point at the card's X-ray labels: external, untrusted, authority 0. Invoke with Trust filter off → GCP answer. Trust ON (card quarantined). Invoke again.</td>
+  <td>Poll: instruction or data?</td>
+  <td>More context is not automatically better context.<br><span class="s"><b>active</b> SYS A001 A002 A003 A004 A006 A007 APOLLO A009 A005 A010 · <b>compressed</b> CONV · <b>evicted</b> A008 PRIV FILE</span></td>
+  <td class="lesson">Retrieved text is information, not instructions.</td>
+</tr></tbody>
+<tbody><tr class="part"><td colspan="7"><b>Part 4: Beyond the window</b><span class="run"><span class="cue slide"><i>13</i>13-part4-beyond-the-window</span><span class="arr">→</span><span class="cue live">LIVE 09 · 10</span><span class="arr">→</span><span class="cue slide"><i>14</i>14-part4-lessons</span></span></td></tr>
+<tr>
+  <td class="code">09<br><span class="t">26:30</span></td>
+  <td><b>Retrieval</b><br><span class="s">observer · 300u · voting open</span><br><span class="s">permissionFilter, projectScope, trustFilter, retrievalEnabled, useAudienceVotes</span></td>
+  <td>Does forgetting something from the window mean we lost it?</td>
+  <td>Say that you set this window up with the contract pushed out. Invoke → Azure from old Slack (a live model may answer AWS from the ADR). Then Retrieve top-k or Admit audience pick. Invoke again.</td>
+  <td>Vote on which search result should enter.</td>
+  <td>Search results 5, selected 2. Similar is not the same as relevant.<br><span class="s"><b>active</b> SYS A001 A004 A006 A007 APOLLO A005 A010 · <b>compressed</b> CONV · <b>quarantined</b> A009 · <b>evicted</b> A002 A003 A008 PRIV FILE</span></td>
+  <td class="lesson">Information does not have to stay in the active window to remain available.</td>
+</tr>
+<tr>
+  <td class="code">10<br><span class="t">29:00</span></td>
+  <td><b>Reveal pipeline</b><br><span class="s">observer · 300u</span><br><span class="s">permissionFilter, projectScope, trustFilter, retrievalEnabled</span></td>
+  <td>Almost everything we did happened before the model generated a word.</td>
+  <td>Nothing. Point at the pipeline; toggles reflect the current policy.</td>
+  <td>Watch.</td>
+  <td>The definition, restated.<br><span class="s"><b>active</b> SYS A001 A002 A003 A004 A005 A010 · <b>compressed</b> CONV · <b>quarantined</b> A009</span></td>
+  <td class="lesson">Almost everything happened before the model generated a word.</td>
+</tr></tbody>
+<tbody><tr class="part"><td colspan="7"><b>Part 5: Who runs the machinery</b><span class="run"><span class="cue slide"><i>15</i>15-part5-who-runs-the-machinery</span><span class="arr">→</span><span class="cue slide"><i>16</i>16-buy</span><span class="arr">→</span><span class="cue live">LIVE 11</span><span class="arr">→</span><span class="cue slide"><i>17</i>17-blend</span><span class="arr">→</span><span class="cue live">LIVE 12</span><span class="arr">→</span><span class="cue slide"><i>18</i>18-build</span><span class="arr">→</span><span class="cue live">LIVE 13</span><span class="arr">→</span><span class="cue slide"><i>19</i>19-part5-lessons</span></span><span class="note">One section slide before each preset.</span></td></tr>
+<tr>
+  <td class="code">11<br><span class="t">31:00</span></td>
+  <td><b>Buy</b><br><span class="s">observer · 300u</span><br><span class="s">permissionFilter, projectScope, trustFilter</span></td>
+  <td>Suppose we're buying the assistant. Which sources should it be allowed to use?</td>
+  <td>Nothing.</td>
+  <td>Toggle the four sources.</td>
+  <td>You vs vendor responsibility split. Buying changes who operates which controls.<br><span class="s"><b>active</b> SYS FILE A002 · <b>compressed</b> CONV</span></td>
+  <td class="lesson">Context engineering still occurs when a vendor operates the machinery.</td>
+</tr>
+<tr>
+  <td class="code">12<br><span class="t">32:45</span></td>
+  <td><b>Blend</b><br><span class="s">observer · 300u</span><br><span class="s">permissionFilter, projectScope, trustFilter, retrievalEnabled</span></td>
+  <td>Now the assistant can reach into systems we own. Enabling a source is not copying it in.</td>
+  <td>Retrieve for current question.</td>
+  <td>Toggle the eight sources.</td>
+  <td>Only matching records appear. If Web is on by majority the vendor page comes too, marked untrusted. A connector expands the environment, not attention.<br><span class="s"><b>active</b> SYS · <b>compressed</b> CONV</span></td>
+  <td class="lesson">Every source you connect adds more to choose from, and the choosing is yours.</td>
+</tr>
+<tr>
+  <td class="code">13<br><span class="t">34:30</span></td>
+  <td><b>Build</b><br><span class="s">observer · 300u</span><br><span class="s">permissionFilter, projectScope, trustFilter, retrievalEnabled, buildControls, summarization, useAudienceVotes</span></td>
+  <td>When we build more of the system, the decisions don't disappear. We inherit them.</td>
+  <td>Context budget 300 → 150, then back. Optional: Drift the contract and invoke.</td>
+  <td>Watch the policy change on their phones.</td>
+  <td>At 150 almost every card is summarized and the lowest-ranked no longer fit. Top-k changes the policy list, not the window. Buy → Blend → Build is who owns the machinery.<br><span class="s"><b>active</b> SYS CONV A001 A002 A003 A004 A006 A007 APOLLO A008 A009 PRIV FILE A005 A010</span></td>
+  <td class="lesson">The more of the system you own, the more of these decisions you own.</td>
+</tr></tbody>
+<tbody><tr class="part"><td colspan="7"><b>Part 6: Same model</b><span class="run"><span class="cue slide"><i>20</i>20-cwa</span><span class="arr">→</span><span class="cue slide"><i>21</i>21-part6-same-model</span><span class="arr">→</span><span class="cue live">LIVE 14 · 15</span><span class="arr">→</span><span class="cue slide"><i>22</i>22-part6-lessons</span><span class="arr">→</span><span class="cue slide"><i>23</i>23-recap</span><span class="arr">→</span><span class="cue slide"><i>24</i>24-questions</span><span class="arr">→</span><span class="cue slide"><i>25</i>25-thank-you</span></span><span class="note">Load 15 before the lessons slide goes up. T pauses the clock at questions. End session after the room clears.</span></td></tr>
+<tr>
+  <td class="code">14<br><span class="t">38:00</span></td>
+  <td><b>Final</b><br><span class="s">observer · 300u</span><br><span class="s">permissionFilter, projectScope, trustFilter, summarization</span></td>
+  <td>Same question. Same model.</td>
+  <td>Invoke assistant. X-ray on shows the Inspector.</td>
+  <td>See the answer on their phones.</td>
+  <td>Correct answer, eval PASS, MODEL UNCHANGED / CONTEXT ENGINEERED.<br><span class="s"><b>active</b> SYS A001 A005 A010 · <b>compressed</b> A002 A003 · <b>quarantined</b> A009 · <b>evicted</b> APOLLO A006 A008 PRIV</span></td>
+  <td class="lesson">Better context can change behavior without changing the model.</td>
+</tr>
+<tr>
+  <td class="code">15<br><span class="t">39:00</span></td>
+  <td><b>Close</b><br><span class="s">observer · 300u</span><br><span class="s">permissionFilter, projectScope, trustFilter</span></td>
+  <td>We selected it, scoped it, compressed it, threw some away, retrieved some later.</td>
+  <td>Event log replay starts on its own; switch it off for the stats. After the talk: End session.</td>
+  <td>Read the definition.</td>
+  <td>Stats. Names deleted and export written when you end the session.<br><span class="s">all available</span></td>
+  <td class="lesson">Context engineering is how we choose and maintain the information available to an assistant as it works.</td>
+</tr></tbody>
+<tbody><tr class="part"><td colspan="7"><b>Optional activities</b><span class="run"><span class="cue live">LIVE A1 · A2 · A3 · A4 · A5</span></span><span class="note">No slides; the display carries each one. Run when a part finishes early. Advance returns to the phase you left.</span></td></tr>
+<tr>
+  <td class="code">A1<br><span class="t">optional</span></td>
+  <td><b>Provenance challenge</b><br><span class="s">observer · 300u · poll</span><br><span class="s">permissionFilter, projectScope, trustFilter</span></td>
+  <td>Three facts. Same words. Which would you trust operationally?</td>
+  <td>X-ray OFF while the poll fills, then X-ray ON to reveal the sources.</td>
+  <td>Pick A, B or C.</td>
+  <td>Contract, Slack, web page. Text identical; only provenance differs.<br><span class="s"><b>active</b> SYS A001 A005 A010 · <b>compressed</b> A002 A003 · <b>quarantined</b> A009</span></td>
+  <td class="lesson">Context is not just content. The text is identical; only provenance differs.</td>
+</tr>
+<tr>
+  <td class="code">A2<br><span class="t">optional</span></td>
+  <td><b>Semantic routing</b><br><span class="s">observer · 300u · poll</span><br><span class="s">permissionFilter, projectScope, trustFilter, relevanceFloor, summarization</span></td>
+  <td>Two questions, one environment. Should the same context serve both?</td>
+  <td>Question: deploy → Invoke. Question: color → Invoke. With X-ray on, the Inspector beside each answer shows what the window held.</td>
+  <td>Poll yes / no; phones show what the window holds for the current question.</td>
+  <td>Deployment cards leave the window for the color question; only the purple preference stays.<br><span class="s"><b>active</b> SYS CONV A001 A002 A003 A004 A006 A007 APOLLO A008 FILE A005 A010 · <b>quarantined</b> A009 · <b>evicted</b> PRIV</span></td>
+  <td class="lesson">Context should be assembled for the task, not merely for the user.</td>
+</tr>
+<tr>
+  <td class="code">A3<br><span class="t">optional</span></td>
+  <td><b>Poisoning by repetition</b><br><span class="s">observer · 300u · poll</span><br><span class="s">permissionFilter, projectScope, trustFilter, useAudienceVotes</span></td>
+  <td>Five sources say Azure. One contract says AWS. Which matters?</td>
+  <td>Invoke with the contract present → AWS. Evict contract → Invoke → the five copies win. With X-ray on, the five cards show authority 1–2, all copied from the memo.</td>
+  <td>Poll.</td>
+  <td>Eval fails on "did not mistake repetition for authority". Frequency is not authority; five copies are not five sources.<br><span class="s"><b>active</b> SYS A001 A002 A004 REP-001 REP-002 REP-003 REP-004 REP-005</span></td>
+  <td class="lesson">Frequency is not authority, and five copies are not five sources.</td>
+</tr>
+<tr>
+  <td class="code">A4<br><span class="t">optional</span></td>
+  <td><b>Multi-agent coordinator</b><br><span class="s">observer · 80u · poll</span><br><span class="s">permissionFilter, projectScope, trustFilter</span></td>
+  <td>Three agents report. The coordinator can hold 80 units. What should it receive?</td>
+  <td>Nothing. Display shows transcripts 560, summaries 70, structured 36.</td>
+  <td>Poll: transcripts / summaries / structured findings.</td>
+  <td>Same budget problem one level up. Natural route into agentic context engineering.<br><span class="s"><b>active</b> SYS</span></td>
+  <td class="lesson">The same budget problem, one level up. Agents hand each other context too.</td>
+</tr>
+<tr>
+  <td class="code">A5<br><span class="t">optional</span></td>
+  <td><b>Structured context</b><br><span class="s">observer · 300u · poll</span><br><span class="s">permissionFilter, projectScope, trustFilter</span></td>
+  <td>Same fact, two representations. Which would you rather reason over programmatically?</td>
+  <td>Nothing.</td>
+  <td>Poll: narrative / structured.</td>
+  <td>58 units of prose vs 12 units of fields. Structure preserves the constraint through compression.<br><span class="s"><b>active</b> SYS A002</span></td>
+  <td class="lesson">Representation is a context decision. Structure preserves constraints and costs less.</td>
+</tr></tbody>
+</table>
+<h2>Optional activities (spec §39–46)</h2>
+<table class="opt">
+<thead><tr><th>Ref</th><th>Activity</th><th>Status</th><th>How to run it</th></tr></thead>
+<tbody><tr><td class="code">§39</td><td><b>Summary corruption</b></td><td class="status">Built</td><td>Summarizer role picks the shorter drifted summary, or press Drift on the contract in the console. Invoke: constraint becomes a preference, eval fails on "constraint not softened". Ask what compression cost us.</td></tr>
+<tr><td class="code">§40</td><td><b>Provenance challenge</b></td><td class="status">Built (preset A1)</td><td>Display shows the same sentence three times with sources hidden; the room votes; V reveals contract, Slack message, vendor webpage. Advance returns to the phase you left.</td></tr>
+<tr><td class="code">§41</td><td><b>Recency challenge</b></td><td class="status">Manual</td><td>With X-ray on, read the ages: Slack 62 days, memo 45 days, ADR 14 days, monitoring 30 s. Ask which should disappear. Answer: potentially none; ask which should govern.</td></tr>
+<tr><td class="code">§42</td><td><b>Poisoning by repetition</b></td><td class="status">Built (preset A3)</td><td>Five low-authority "Azure preferred" cards that copied each other, against one contract. With the contract present the answer stays AWS; evict it and the copies win, and the eval flags repetition mistaken for authority.</td></tr>
+<tr><td class="code">§43</td><td><b>Semantic retrieval failure</b></td><td class="status">Built (Retrieval phase)</td><td>The five search results sort by similarity: contract 0.94, security policy 0.85, Apollo 0.70, old Slack 0.55, expense policy 0.20. Only the top two clear the 0.72 floor. Point at similarity vs the room's votes.</td></tr>
+<tr><td class="code">§44</td><td><b>Multi-agent coordinator</b></td><td class="status">Built (preset A4, display + poll)</td><td>Display shows three agent findings with transcript, summary and structured costs against an 80-unit coordinator; the room votes on what the coordinator receives.</td></tr>
+<tr><td class="code">§45</td><td><b>Structured context</b></td><td class="status">Built (preset A5, display + poll)</td><td>Display shows the contract as a 58-unit paragraph beside a 12-unit JSON object; the room votes on which it would rather reason over.</td></tr>
+<tr><td class="code">§46</td><td><b>Semantic routing</b></td><td class="status">Built (preset A2)</td><td>Console switches the question between deployment and dashboard color; the relevance floor re-assembles the window live. Invoke for each: the color answer cites only the purple preference.</td></tr></tbody>
+</table>
+<h2>Cards</h2>
+<table>
+<thead><tr><th>ID</th><th>Title</th><th>Source</th><th>Scope</th><th>Age</th><th>Auth</th><th>Trust</th><th>Units (summary)</th></tr></thead>
+<tbody><tr><td class="code">SYS-001</td><td>System instructions</td><td>Application</td><td>session</td><td>current</td><td>5</td><td>trusted</td><td>40 → 14</td></tr>
+<tr><td class="code">CONV-001</td><td>Conversation · turns 1–10</td><td>Chat history</td><td>session</td><td>4 min</td><td>2</td><td>user-provided</td><td>96 → 34</td></tr>
+<tr><td class="code">ATLAS-001</td><td>Launch schedule</td><td>Project plan</td><td>atlas</td><td>current</td><td>4</td><td>internal</td><td>18 → 7</td></tr>
+<tr><td class="code">ATLAS-002</td><td>Customer contract</td><td>CRM / contract system</td><td>atlas</td><td>current</td><td>5</td><td>trusted</td><td>30 → 11 (drift 7)</td></tr>
+<tr><td class="code">ATLAS-003</td><td>Security policy</td><td>Security policy</td><td>org</td><td>current</td><td>5</td><td>trusted</td><td>23 → 9 (drift 7)</td></tr>
+<tr><td class="code">ATLAS-004</td><td>Architecture decision</td><td>ADR-019</td><td>atlas</td><td>14 days</td><td>4</td><td>internal</td><td>18 → 8</td></tr>
+<tr><td class="code">ATLAS-005</td><td>Infrastructure health</td><td>Infrastructure monitoring</td><td>atlas</td><td>30 s</td><td>4</td><td>trusted</td><td>27 → 12</td></tr>
+<tr><td class="code">ATLAS-006</td><td>Old Slack conversation</td><td>Slack #atlas</td><td>atlas</td><td>62 days</td><td>1</td><td>user-provided</td><td>19 → 9</td></tr>
+<tr><td class="code">ATLAS-007</td><td>Executive preference</td><td>Executive strategy memo</td><td>org</td><td>45 days</td><td>3</td><td>internal</td><td>28 → 10</td></tr>
+<tr><td class="code">APOLLO-001</td><td>Apollo architecture</td><td>Architecture documentation</td><td>apollo</td><td>current</td><td>4</td><td>internal</td><td>15 → 7</td></tr>
+<tr><td class="code">ATLAS-008</td><td>Product preference</td><td>Slack #atlas-product</td><td>atlas</td><td>current</td><td>1</td><td>user-provided</td><td>20 → 8</td></tr>
+<tr><td class="code">ATLAS-009</td><td>Vendor webpage</td><td>Retrieved external webpage</td><td>none</td><td>current</td><td>0</td><td>untrusted</td><td>27 → 12</td></tr>
+<tr><td class="code">PRIVATE-001</td><td>Alice's private memory</td><td>User memory</td><td>alice</td><td>current</td><td>3</td><td>user-provided</td><td>23 → 9</td></tr>
+<tr><td class="code">ATLAS-010</td><td>Operational approval procedure</td><td>Deployment runbook</td><td>atlas</td><td>current</td><td>4</td><td>internal</td><td>20 → 9 (drift 8)</td></tr>
+<tr><td class="code">FILE-001</td><td>Launch checklist</td><td>Uploaded file</td><td>atlas</td><td>1 day</td><td>3</td><td>internal</td><td>32 → 12</td></tr>
+<tr><td class="code">REP-001</td><td>Slack: Azure preferred</td><td>Slack #eng-general</td><td>org</td><td>40 days</td><td>1</td><td>user-provided</td><td>14 → 6</td></tr>
+<tr><td class="code">REP-002</td><td>Meeting notes: Azure preferred</td><td>Platform sync notes</td><td>org</td><td>38 days</td><td>2</td><td>internal</td><td>16 → 6</td></tr>
+<tr><td class="code">REP-003</td><td>Wiki page: Azure preferred</td><td>Team wiki (copied from memo)</td><td>org</td><td>35 days</td><td>2</td><td>internal</td><td>17 → 6</td></tr>
+<tr><td class="code">REP-004</td><td>Retrospective: Azure preferred</td><td>Q2 retrospective</td><td>org</td><td>30 days</td><td>1</td><td>internal</td><td>15 → 6</td></tr>
+<tr><td class="code">REP-005</td><td>Slack thread: Azure preferred</td><td>Slack #atlas (thread)</td><td>atlas</td><td>20 days</td><td>1</td><td>user-provided</td><td>15 → 6</td></tr>
+<tr><td class="code">FIN-001</td><td>Expense policy</td><td>Finance wiki</td><td>org</td><td>120 days</td><td>3</td><td>internal</td><td>21 → 9</td></tr></tbody>
+</table>
+<script>
+// Pin each part heading directly beneath the column header, and let the next part push it off.
+// Browsers confine a sticky cell to the whole table, not its tbody, so the push is computed here.
+const fit = () => {
+  for (const t of document.querySelectorAll("table")) {
+    const h = t.tHead.getBoundingClientRect().height;
+    t.style.setProperty("--thead-h", h + "px");
+    for (const td of t.querySelectorAll(".part td")) {
+      const part = td.closest("tbody").getBoundingClientRect();
+      td.style.top = Math.min(h, part.bottom - td.getBoundingClientRect().height) + "px";
+    }
+  }
+};
+let queued = false;
+const onScroll = () => { if (!queued) { queued = true; requestAnimationFrame(() => { queued = false; fit(); }); } };
+fit(); addEventListener("scroll", onScroll, { passive: true }); addEventListener("resize", onScroll);
+</script>
+<p class="foot">Generated from shared/src/presets.ts and cards.ts by <code>npm run cheatsheet</code>. Card-state abbreviations: A = ATLAS, PRIV = PRIVATE-001. Expected well-grounded answer needs A002, A005 and A010 in the window; it must not depend on APOLLO, A006, A008, PRIV or A009.</p>
+</body></html>

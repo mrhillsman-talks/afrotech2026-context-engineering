@@ -1,0 +1,36 @@
+# In-cluster build objects, applied only when the cluster supports builds (deploy.sh without IMAGE).
+# By hand: oc process --local -f deploy/openshift/build.yaml [-p NAME=...] | oc apply -f -
+apiVersion: template.openshift.io/v1
+kind: Template
+metadata:
+  name: ctx-audience-app-build
+# The deployed set's label, plus `app` to match the runtime objects. `oc process` adds a Template's labels to
+# both objects below. Each build copies its BuildConfig's labels, so the builds carry the set's label too.
+# The key must match SET_LABEL_KEY in deploy.sh and the same key in app.yaml.
+labels:
+  app: ${NAME}
+  ctx-audience-app/deployed-set: ${NAME}
+parameters:
+- name: NAME
+  description: Name of the ImageStream and BuildConfig; the same NAME as the app.
+  value: ctx-audience-app
+objects:
+- apiVersion: image.openshift.io/v1
+  kind: ImageStream
+  metadata:
+    name: ${NAME}
+- apiVersion: build.openshift.io/v1
+  kind: BuildConfig
+  metadata:
+    name: ${NAME}
+  spec:
+    output:
+      to:
+        kind: ImageStreamTag
+        name: ${NAME}:latest
+    source:
+      type: Binary
+    strategy:
+      type: Docker
+      dockerStrategy:
+        dockerfilePath: Dockerfile

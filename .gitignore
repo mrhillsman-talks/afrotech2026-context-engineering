@@ -1,0 +1,17 @@
+node_modules
+dist
+data/*.json
+data/*.ndjson
+.env
+.DS_Store
+pnpm-lock.yaml
+pnpm-workspace.yaml
+docs/mockups.html
+
+docs/misc
+
+.codex
+.serena
+.mcp.json
+
+slides-png/

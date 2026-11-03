@@ -1,0 +1,7 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    { "name": "app", "runtimeExecutable": "npm", "runtimeArgs": ["start"], "port": 3000 },
+    { "name": "dev", "runtimeExecutable": "sh", "runtimeArgs": ["-c", "PORT=3000 npm run dev"], "port": 5173 }
+  ]
+}

@@ -1,0 +1,37 @@
+# The project's Let's Encrypt issuer, in the same shape as the other projects on the cluster. deploy.sh applies it
+# with CERT_MANAGER=1 only when the project has no Issuer of that name yet; an existing one is used as it is.
+# It belongs to the project, not to one deployed set: it carries no set label and `deploy.sh delete` leaves it, so
+# a second room in the project, or anything else there, can keep using it.
+# It answers the HTTP-01 challenge through the OpenShift router: cert-manager creates a short-lived Ingress for
+# /.well-known/acme-challenge/ on the host, which the cluster turns into a Route, and removes it once the challenge
+# passes. So the host's DNS record must already point at the router, and port 80 must reach it.
+# By hand:
+#   oc process --local -f deploy/openshift/acme-issuer.yaml [-p CERT_ISSUER=...] | oc apply -f -
+apiVersion: template.openshift.io/v1
+kind: Template
+metadata:
+  name: ctx-audience-app-acme-issuer
+parameters:
+- name: CERT_ISSUER
+  description: Name of the Issuer.
+  value: letsencrypt
+- name: ACME_SERVER
+  description: ACME directory. Let's Encrypt staging is https://acme-staging-v02.api.letsencrypt.org/directory.
+  value: https://acme-v02.api.letsencrypt.org/directory
+objects:
+- apiVersion: cert-manager.io/v1
+  kind: Issuer
+  metadata:
+    name: ${CERT_ISSUER}
+  spec:
+    acme:
+      server: ${ACME_SERVER}
+      # letsencrypt-account-key for the default name, as in the other projects; another name, such as a staging
+      # issuer, gets its own account key.
+      privateKeySecretRef:
+        name: ${CERT_ISSUER}-account-key
+      solvers:
+      - http01:
+          ingress:
+            # The OpenShift router's IngressClass.
+            ingressClassName: openshift-default

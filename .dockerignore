@@ -1,0 +1,10 @@
+node_modules
+**/node_modules
+client/dist
+data
+.env
+.git
+.claude
+docs
+deploy
+pnpm-lock.yaml
