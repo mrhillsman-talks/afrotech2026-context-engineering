@@ -86,7 +86,7 @@ the label as well, so applying them by hand gives the same result.
 
 The objects from `app.yaml` also keep the `app=<NAME>` label, which the Deployment and Service select pods by.
 
-To change any of this, start with the "CHANGING THIS SCRIPT" notes at the top of [deploy.sh](deploy.sh). In short:
+To change any of this, start with the "CHANGING THIS SCRIPT" notes at the top of [deploy.sh](deploy.sh):
 
 - **Another object in a deploy.** Pipe its manifest to `apply_to_set`. If its kind is new, add the kind to the kinds
   lists in part 2 of the script, or `delete` and the printed commands will not see it.
