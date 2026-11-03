@@ -10,7 +10,7 @@
     "test": "tsx --test test/*.test.ts"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.80.0",
+    "@anthropic-ai/sdk": "^1.4.0",
     "@ctx/shared": "*",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
