@@ -15,6 +15,15 @@ function lanIp() {
   for (const ifs of Object.values(os.networkInterfaces())) for (const i of ifs ?? []) if (i.family === "IPv4" && !i.internal) return i.address;
   return "localhost";
 }
+// .env.example ships placeholders for the two public-facing values. Refuse to start until they are replaced or
+// cleared, so a copied example never puts a placeholder on the projector's QR code.
+const PLACEHOLDER = /YOUR-PUBLIC-HOST|YOUR-SHORT-LINK/;
+for (const name of ["PUBLIC_URL", "SHORT_URL"] as const) {
+  if (PLACEHOLDER.test(process.env[name] ?? "")) {
+    console.error(`${name} still holds the placeholder from .env.example. Set it to your own value, or leave it empty for the default (see .env.example).`);
+    process.exit(1);
+  }
+}
 const PUBLIC_URL = (process.env.PUBLIC_URL || `http://${lanIp()}:${PORT}`).replace(/\/$/, "");
 const joinUrl = `${PUBLIC_URL}/session/main`;
 // Printed in the lobby instead of the site root, e.g. a short link that redirects to it. Display only: the QR code,

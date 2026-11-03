@@ -52,7 +52,8 @@ npm install
 cp .env.example .env
 ```
 
-Set `SPEAKER_KEY` in `.env`. Then:
+In `.env`, set `SPEAKER_KEY` and replace the two placeholders, `PUBLIC_URL` and `SHORT_URL` (see
+[Configuration](#configuration)). Then:
 
 ```bash
 npm run build
@@ -88,6 +89,12 @@ variable.
 | `BASE_PATH` | the path of `PUBLIC_URL` | Overrides the prefix, for a proxy that strips it before forwarding |
 | `SHORT_URL` | the site root | Text printed under the QR code only; the QR code still encodes `PUBLIC_URL` |
 | `SLIDES_DIR` | `slides/` | Folder of slide images |
+
+**`PUBLIC_URL` and `SHORT_URL` must be updated.** `.env.example` ships them as placeholders,
+`https://YOUR-PUBLIC-HOST` and `YOUR-SHORT-LINK`, and the server refuses to start while either still
+holds its placeholder. Set `PUBLIC_URL` to the address the audience's devices will reach, or leave
+it empty to use the LAN address, which only works when every device is on the same network. Set
+`SHORT_URL` to your own short link, or leave it empty to print the site root.
 | `NOTES_FILE` | `notes/speaker-notes.md` | Speaker notes, one per run sheet step |
 | `NOTES_READONLY` | unset | `1` turns saving notes off; the notes view still shows them |
 

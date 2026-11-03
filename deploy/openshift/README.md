@@ -118,7 +118,7 @@ Every option is an environment variable. The deployment options are read from th
 | `CERT_ISSUER_KIND` | `Issuer` | `ClusterIssuer` to use a cluster-wide one instead; it is never created. |
 | `ACME_SERVER` | Let's Encrypt production | ACME directory of an Issuer the script creates. Staging is `https://acme-staging-v02.api.letsencrypt.org/directory`. |
 | `PUBLIC_URL` | `https://<route host><ROUTE_PATH>` | Where the QR code points. Set it when another name (a CDN, a short link) fronts the Route. |
-| `SHORT_URL` | the site root | Text the lobby prints under the QR code, e.g. a short link that redirects to the room. Display only: the QR code, Route and certificate are unchanged. Unset it on a later deploy and the lobby goes back to the site root. |
+| `SHORT_URL` | the site root | Text the lobby prints under the QR code, e.g. a short link that redirects to the room. Display only: the QR code, Route and certificate are unchanged. Unset it on a later deploy and the lobby goes back to the site root. The placeholder in `.env.example` is not read here; the pod refuses to start if a placeholder reaches it. |
 | `NOTES_READONLY` | `1` | `1` turns saving speaker notes off; the notes view still shows the `notes/speaker-notes.md` built into the image. `0` turns saving on, into the container's copy of the file, which the next deploy or pod restart replaces. Edit notes in the repository and deploy again. |
 | `STORAGE_CLASS` | the cluster's default class | Fixed once the claim exists. |
 | `STORAGE_SIZE` | `1Gi` | Fixed once the claim exists. |

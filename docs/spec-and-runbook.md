@@ -1460,6 +1460,9 @@ LLM_TIMEOUT_MS    default 8000
 ```
 
 `.env` is read once at startup. Without any `LLM_*` setting the renderer is deterministic.
+`.env.example` ships `PUBLIC_URL` and `SHORT_URL` as placeholders (`https://YOUR-PUBLIC-HOST`,
+`YOUR-SHORT-LINK`); the server refuses to start while either still holds its placeholder, so each
+must be set to your own value or cleared.
 
 ## 28. State synchronization
 
