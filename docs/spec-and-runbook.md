@@ -316,7 +316,8 @@ shared session.
 Projected, designed for legibility at distance. It shows the current phase, the question, the
 budget and the cards in context with their source, scope, age, authority, trust and cost; context
 pressure, incoming, evicted and compressed information; aggregated votes; and the assistant's
-response. No surname or private participant information appears on it.
+response. Participants appear as numbers; first names appear beside them only while the console's
+Names switch is on (section 25). No surname or private participant information appears on it.
 
 ### C. Speaker console
 
@@ -344,8 +345,8 @@ Registration asks for first name, last name and experience level, with three cho
 AI products; I build applications using AI APIs; I build or operate AI infrastructure.
 
 The backend creates a random participant UUID, a short visible number such as `P042`, and a session
-token. The UUID tracks behavior. The display shows a participant as first name plus number, never a
-surname.
+token. The UUID tracks behavior. The display shows a participant's number, and the first name
+beside it only while the Names switch is on, never a surname.
 
 ## 8. Session modes
 
@@ -1197,6 +1198,7 @@ ADVANCE →
 ### Other console controls
 
 - **Presets 00 to 15** and **A1 to A5** load a phase (section 20).
+- **Registration**, **X-ray** and **Names** switches in the header. Names is off by default, so the display's "Just joined" line shows participant numbers only; on, it shows first names as typed at registration. Keep it off on a public URL unless you can see the room.
 - **Invoke assistant** runs the assembler over the current window with the current policy.
 - **Simulate N** adds simulated participants who select, vote and contribute per phase, most choosing well and a visible minority not, so the talk runs with no real attendees. **Clear sims** removes only the simulated participants.
 - **Staging** holds free-text submissions until you promote or discard them (section 16).
@@ -1408,6 +1410,7 @@ session.ended · session.reset
 - **Late joiners are parked.** Anyone who registers while a phase is in progress sees a waiting screen and cannot act until the next preset; the console header shows "N waiting in lobby · admit now" to let them in early. Joining during Lobby or Close never parks, and simulated participants are never parked.
 - **Leave the room.** Every participant screen ends with a "Leave the room" link. Leaving blanks the person's name immediately, forgets the phone's token (the next registration on that device gets a fresh number), and stops counting them as present. What they already voted stays in the room's totals, anonymously. The console header shows how many have left.
 - **Duplicate sessions.** The participant page opened twice in one browser counts as a duplicate session on the facilitator view.
+- **Limits.** The room is a public URL, so: a WebSocket frame over 64 KiB closes the socket (code 1009); a socket that sends more than 100 messages in ten seconds has the rest refused with "Too many requests"; registration stops at `MAX_PARTICIPANTS` real participants (1000 by default) with "The room is full". Simulated participants are not counted.
 
 ### Session state and persistence
 
@@ -1450,6 +1453,7 @@ BASE_PATH         default: the path of PUBLIC_URL; the prefix the app serves und
 SLIDES_DIR        default slides/
 NOTES_FILE        default notes/speaker-notes.md; one note per run sheet step
 NOTES_READONLY    1 turns saving notes off; the notes view still shows them
+MAX_PARTICIPANTS  default 1000; real registrations the room accepts
 LLM_PROVIDER      anthropic | openai | openai-responses | openai-compatible | ollama
 LLM_MODEL         model name
 LLM_API_KEY       or ANTHROPIC_API_KEY / OPENAI_API_KEY, which also select the provider
@@ -1486,6 +1490,9 @@ missed WebSocket messages.
 - 5 to 10 events per second sustained;
 - short spikes of 100+ votes in several seconds;
 - shared-display updates within roughly 500 ms.
+
+The limits that bound a public room (frame size, per-socket message rate, registration cap) are
+in section 27.
 
 ## 30. Speaker state machine
 

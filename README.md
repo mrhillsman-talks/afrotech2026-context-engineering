@@ -98,6 +98,7 @@ it empty to use the LAN address, which only works when every device is on the sa
 `SHORT_URL` to your own short link, or leave it empty to print the site root.
 | `NOTES_FILE` | `notes/speaker-notes.md` | Speaker notes, one per run sheet step |
 | `NOTES_READONLY` | unset | `1` turns saving notes off; the notes view still shows them |
+| `MAX_PARTICIPANTS` | `1000` | Real registrations the room accepts; later ones get "The room is full". Simulated participants are not counted |
 
 ### Live model (optional)
 
@@ -163,6 +164,7 @@ follows the run sheet. Presets can also be loaded by hand from the console.
 | `R` | Reset the phase, keeping what participants chose |
 | `F` | Freeze or unfreeze the audience |
 | `V` | X-ray (card metadata) on or off for the whole room |
+| Names switch (header) | Show first names in the display's "Just joined" line; off by default, numbers only |
 | `S` / `X` / `Z` / `P` | Show or hide the slide; next slide; previous slide; back to the live view |
 
 On the display window itself, `V` toggles X-ray locally, `I` the Context Inspector and `M` a

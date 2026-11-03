@@ -188,6 +188,8 @@ export interface SessionState {
   votingOpen: boolean;
   frozen: boolean;
   xray: boolean;
+  /** Display shows "Just joined" with first names. Off: participant numbers only, so nobody can put text on the projector by registering. */
+  showNames: boolean;
   showResponse: boolean;
   /** Display plays back the event log as an animated timeline. */
   replay: boolean;
@@ -343,6 +345,7 @@ export type SpeakerCommand =
   | { type: "registration.set"; open: boolean }
   | { type: "freeze.set"; frozen: boolean }
   | { type: "xray.set"; on: boolean }
+  | { type: "names.set"; on: boolean }
   | { type: "showResponse.set"; on: boolean }
   | { type: "replay.set"; on: boolean }
   | { type: "replay.play" }

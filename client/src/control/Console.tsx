@@ -141,6 +141,7 @@ export function Console() {
         <i className="sep" />
         <label className="tog">Registration <input type="checkbox" className="sw" checked={s.registrationOpen} onChange={(e) => send({ type: "registration.set", open: e.target.checked })} /></label>
         <label className="tog">X-ray <input type="checkbox" className="sw" checked={s.xray} onChange={(e) => send({ type: "xray.set", on: e.target.checked })} /></label>
+        <label className="tog" title="Off: the display's Just joined line shows participant numbers only. On: first names as typed at registration.">Names <input type="checkbox" className="sw" checked={s.showNames} onChange={(e) => send({ type: "names.set", on: e.target.checked })} /></label>
       </div>
     </header>
 

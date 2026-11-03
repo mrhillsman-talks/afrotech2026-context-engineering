@@ -77,7 +77,7 @@ export function displayView(store: Store, joinUrl: string, shortUrl?: string): D
   const slides = store.slides?.() ?? [];
   const s = store.state;
   const recent = store.present().sort((a, b) => b.joinedAt.localeCompare(a.joinedAt)).slice(0, 8)
-    .map((p) => `${p.firstName} ${p.number}`);
+    .map((p) => (s.showNames ? `${p.firstName} ${p.number}` : p.number));
   return {
     kind: "display", version: s.version,
     state: { ...s, events: s.events.slice(-40) },

@@ -39,7 +39,7 @@ const SHORT_URL = process.env.SHORT_URL?.trim() || undefined;
 // e.g. BASE_PATH=/ behind a proxy that strips the prefix before forwarding.
 const basePath = process.env.BASE_PATH ? normalizeBasePath(process.env.BASE_PATH) : basePathOf(PUBLIC_URL);
 
-const store = new Store({ fresh, dataDir: path.join(ROOT, "data") });
+const store = new Store({ fresh, dataDir: path.join(ROOT, "data"), maxParticipants: Number(process.env.MAX_PARTICIPANTS || 1000) });
 attachSimulator(store);
 const slidesDir = process.env.SLIDES_DIR ? path.resolve(ROOT, process.env.SLIDES_DIR) : path.join(ROOT, "slides");
 // The speaker notes, one per run-sheet step. NOTES_READONLY=1 turns saving off (the cluster, where a save would not

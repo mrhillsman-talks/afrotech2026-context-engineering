@@ -374,4 +374,41 @@ describe("speaker notes", () => {
     await landed(0);
     ctl.close(); n.close();
   });
+
+  test("the display shows participant numbers only until the speaker turns names on", async () => {
+    const ctl = await Client.open("control", { key: KEY }); await ctl.snapshot();
+    const p = await Client.open("participant");
+    assert.equal((await p.cmd({ type: "register", firstName: "Nadia", lastName: "Shown", experience: "use" })).ok, true);
+    const disp = await Client.open("display");
+    const first = await disp.snapshot() as DisplayView;
+    assert.ok(first.recentJoins.length > 0, "someone has joined");
+    assert.ok(first.recentJoins.every((j) => /^P\d{3}$/.test(j)), `numbers only by default: ${first.recentJoins.join(", ")}`);
+    assert.equal((await ctl.cmd({ type: "names.set", on: true })).ok, true);
+    const named = await disp.next((m) => m.type === "snapshot" && (m as { view: DisplayView }).view.recentJoins.some((j) => /^Nadia P\d{3}$/.test(j)));
+    assert.ok(named, "first names appear once the switch is on");
+    assert.equal((await ctl.cmd({ type: "names.set", on: false })).ok, true);
+    const back = await disp.next((m) => m.type === "snapshot" && (m as { view: DisplayView }).view.recentJoins.every((j) => /^P\d{3}$/.test(j)));
+    assert.ok(back, "and go again when it is off");
+    p.close(); disp.close(); ctl.close();
+  });
+
+  test("a frame over the payload limit closes the socket, and a flood of messages is refused", async () => {
+    const big = await Client.open("participant");
+    const closed = new Promise<number>((res) => big.ws.once("close", (code) => res(code)));
+    big.ws.send("x".repeat(70 * 1024));
+    assert.equal(await closed, 1009, "too big: closed with 1009");
+    const flood = await Client.open("participant");
+    const acks = await Promise.all(Array.from({ length: 120 }, () => flood.cmd({ type: "solo.toggle", itemId: "ATLAS-002" })));
+    assert.ok(acks.some((a) => a.ok === false && /slow down/.test(a.error)), "messages past the window's limit are refused");
+    assert.ok(acks.slice(0, 50).every((a) => !(a.ok === false && /slow down/.test(a.error))), "the first ones are not");
+    flood.close();
+  });
+
+  test("registration stops at the room's cap; simulated participants do not count toward it", () => {
+    const st = new Store({ fresh: true, dataDir: fs.mkdtempSync(path.join(os.tmpdir(), "ctx-cap-")), maxParticipants: 2 });
+    st.register("A", "One", "use"); st.register("B", "Two", "use");
+    assert.throws(() => st.register("C", "Three", "use"), /full/);
+    st.register("S", "Sim", "use", true);
+    assert.equal(st.participants.size, 3, "a simulated participant still gets in");
+  });
 });

@@ -26,7 +26,7 @@ function freshState(): SessionState {
     id: "main", version: 1, phase: "lobby", question: QUESTION, questionKey: "deploy",
     policy: { ...DEFAULT_POLICY }, renderer: llmConfigured() ? "live-fallback" : "deterministic",
     budget: 400, soloBudget: 80,
-    registrationOpen: true, submissionOpen: false, votingOpen: false, frozen: false, xray: false, showResponse: false, replay: false,
+    registrationOpen: true, submissionOpen: false, votingOpen: false, frozen: false, xray: false, showNames: false, showResponse: false, replay: false,
     items, runs: [], polls: {}, retrievalCandidates: [], staging: [], events: [],
     stats: { decisions: 0, evictions: 0, summaries: 0, retrievals: 0, submissions: 0 },
     llmStatus: llmConfigured() ? "ok" : "unset", startedAt: new Date().toISOString(),
@@ -46,7 +46,10 @@ export class Store {
   private readonly snapshotFile: string;
   private readonly eventsFile: string;
 
-  constructor(opts: { fresh: boolean; dataDir?: string }) {
+  /** Real registrations the room accepts; simulated participants are not counted. Bounds memory and the snapshot on a public URL. */
+  readonly maxParticipants: number;
+  constructor(opts: { fresh: boolean; dataDir?: string; maxParticipants?: number }) {
+    this.maxParticipants = opts.maxParticipants ?? 1000;
     this.dataDir = opts.dataDir ?? DEFAULT_DATA_DIR;
     this.snapshotFile = path.join(this.dataDir, "snapshot.json");
     this.eventsFile = path.join(this.dataDir, "events.ndjson");
@@ -169,6 +172,7 @@ export class Store {
   /* ---------- registration ---------- */
   register(firstName: string, lastName: string, experience: Participant["experience"], simulated = false): Participant {
     if (!this.state.registrationOpen && !simulated) throw new CommandError("Registration is closed");
+    if (!simulated && [...this.participants.values()].filter((p) => !p.simulated).length >= this.maxParticipants) throw new CommandError("The room is full");
     firstName = firstName.trim().slice(0, 40); lastName = lastName.trim().slice(0, 40);
     if (!firstName || !lastName) throw new CommandError("First and last name are required");
     const p: Participant = {
@@ -478,6 +482,7 @@ export class Store {
       case "registration.set": s.registrationOpen = cmd.open; break;
       case "freeze.set": s.frozen = cmd.frozen; this.log("audience", cmd.frozen ? "frozen" : "unfrozen"); break;
       case "xray.set": s.xray = cmd.on; break;
+      case "names.set": s.showNames = cmd.on; this.log("display", cmd.on ? "names shown" : "names hidden"); break;
       case "showResponse.set": s.showResponse = cmd.on; break;
       case "replay.set": s.replay = cmd.on; s.replayClock = undefined; if (cmd.on) this.startReplay(); this.log("display", cmd.on ? "replay started" : "replay stopped"); break;
       // Play at the end starts over, whether it ran out or was paused there; pause banks the position; seek keeps playing or paused.

@@ -60,10 +60,13 @@ app.use(base || "/", r);
 if (base) app.get("/", (_req, res) => res.redirect(`${base}/session/main`));
 
 const server = http.createServer(app);
-const wss = new WebSocketServer({ server, path: `${base}/ws` });
+// Every client message is a small command (a note is the largest, a few KB); a bigger frame closes the socket (1009).
+const wss = new WebSocketServer({ server, path: `${base}/ws`, maxPayload: 64 * 1024 });
+// Messages one socket may send in any ten-second window. A phone sends a few per minute; the room is a public URL.
+const RATE_LIMIT = { window: 10_000, max: 100 };
 
 type Role = "participant" | "display" | "control" | "facilitator" | "notes";
-interface Conn { ws: WebSocket; role?: Role; participantId?: string; alive: boolean }
+interface Conn { ws: WebSocket; role?: Role; participantId?: string; alive: boolean; sent: number[] }
 const conns = new Set<Conn>();
 const send = (ws: WebSocket, msg: ServerMessage) => { if (ws.readyState === WebSocket.OPEN) ws.send(JSON.stringify(msg)); };
 
@@ -91,12 +94,21 @@ store.onChange(broadcast);
 const notesMessage = (): ServerMessage => ({ type: "notes", notes: notes.notes, readOnly: notes.readOnly });
 
 wss.on("connection", (ws) => {
-  const c: Conn = { ws, alive: true };
+  const c: Conn = { ws, alive: true, sent: [] };
   conns.add(c);
   ws.on("pong", () => { c.alive = true; });
+  // ws reports a bad or oversized frame as an error on the socket and then closes it. Without a listener the
+  // error is uncaught and takes the whole server down, so a hostile client must never find one missing.
+  ws.on("error", (e) => { console.warn(`socket error: ${e.message}`); });
   ws.on("message", async (raw) => {
     let msg: ClientMessage;
     try { msg = JSON.parse(String(raw)); } catch { return; }
+    const now = Date.now();
+    c.sent = c.sent.filter((t) => now - t < RATE_LIMIT.window); c.sent.push(now);
+    if (c.sent.length > RATE_LIMIT.max) {
+      if (msg.type === "cmd") send(ws, { type: "ack", id: msg.id, ok: false, error: "Too many requests; slow down" });
+      return;
+    }
     if (msg.type === "ping") return send(ws, { type: "pong" });
     if (msg.type === "hello") {
       if ((msg.role === "control" || msg.role === "facilitator" || msg.role === "notes") && msg.key !== SPEAKER_KEY) return send(ws, { type: "unauthorized" });
