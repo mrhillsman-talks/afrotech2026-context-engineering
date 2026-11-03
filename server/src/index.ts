@@ -8,7 +8,13 @@ import { createApp, basePathOf, normalizeBasePath } from "./app.js";
 import { llmInfo } from "./llm.js";
 
 const PORT = Number(process.env.PORT || 3000);
-const SPEAKER_KEY = process.env.SPEAKER_KEY || "change-me";
+// The key gates the console, the export and the notes. Refuse to start without one, or with the placeholder from
+// .env.example or the old example value, so a deployment never runs with a key anyone who read the repo knows.
+const SPEAKER_KEY = (process.env.SPEAKER_KEY ?? "").trim();
+if (!SPEAKER_KEY || /^(CHOOSE-A-SECRET|change-me)$/i.test(SPEAKER_KEY)) {
+  console.error("SPEAKER_KEY is empty or still holds the placeholder from .env.example. Set it to a secret of your own.");
+  process.exit(1);
+}
 const fresh = process.argv.includes("--fresh");
 
 function lanIp() {
@@ -42,14 +48,17 @@ const notesFile = process.env.NOTES_FILE ? path.resolve(ROOT, process.env.NOTES_
 const notes = new NotesFile(notesFile, /^(1|true|yes)$/i.test(process.env.NOTES_READONLY ?? ""));
 const server = createApp({ store, notes, speakerKey: SPEAKER_KEY, joinUrl, shortUrl: SHORT_URL, distDir: path.join(ROOT, "client/dist"), slidesDir, basePath });
 
+// The key is printed only on a terminal. Captured output (a pod log, a service manager, a file) gets a placeholder,
+// so the key does not end up in logs that more people can read than can read .env.
+const KEY_SHOWN = process.stdout.isTTY ? SPEAKER_KEY : "<SPEAKER_KEY>";
 server.listen(PORT, () => {
   console.log(`Context Window Live`);
   console.log(`  participants : ${joinUrl}`);
   if (SHORT_URL) console.log(`  short url    : ${SHORT_URL} (lobby text only)`);
   console.log(`  display      : ${PUBLIC_URL}/session/main/display`);
-  console.log(`  control      : ${PUBLIC_URL}/session/main/control?key=${SPEAKER_KEY}`);
-  console.log(`  facilitator  : ${PUBLIC_URL}/session/main/facilitator?key=${SPEAKER_KEY}`);
-  console.log(`  notes        : ${PUBLIC_URL}/session/main/notes?key=${SPEAKER_KEY}  (${path.relative(ROOT, notesFile)}${notes.readOnly ? ", read-only" : ""})`);
+  console.log(`  control      : ${PUBLIC_URL}/session/main/control?key=${KEY_SHOWN}`);
+  console.log(`  facilitator  : ${PUBLIC_URL}/session/main/facilitator?key=${KEY_SHOWN}`);
+  console.log(`  notes        : ${PUBLIC_URL}/session/main/notes?key=${KEY_SHOWN}  (${path.relative(ROOT, notesFile)}${notes.readOnly ? ", read-only" : ""})`);
   const llm = llmInfo();
   console.log(`  live model   : ${llm.configured ? llm.info : `off (deterministic only${llm.reason ? `: ${llm.reason}` : ""})`}${fresh ? "  · fresh state" : ""}`);
   console.log(`  slides       : ${store.slides?.().length ?? 0} in ${slidesDir}`);

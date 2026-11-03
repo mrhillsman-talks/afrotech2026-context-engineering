@@ -319,7 +319,9 @@ secret_value() {
   else ( if [ -f .env ]; then set -a; . ./.env; set +a; fi; printf '%s' "${!1:-}" ); fi
 }
 if [ "${REFRESH_SECRET:-0}" = 1 ] || ! oc get secret "$NAME-secrets" >/dev/null 2>&1; then
-  [ -n "$(secret_value SPEAKER_KEY)" ] || { echo "set SPEAKER_KEY (or put it in .env) for the first deploy" >&2; exit 1; }
+  case "$(secret_value SPEAKER_KEY)" in
+    ""|CHOOSE-A-SECRET|change-me) echo "set SPEAKER_KEY to a secret of your own (in the environment or .env); the pod refuses to start with the placeholder" >&2; exit 1 ;;
+  esac
   literals=()
   for k in $SECRET_KEYS; do literals+=("--from-literal=$k=$(secret_value "$k")"); done
   # --dry-run=client writes the manifest instead of creating the secret, so it can be labelled and applied.

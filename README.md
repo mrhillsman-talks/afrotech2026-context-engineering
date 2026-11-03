@@ -52,7 +52,7 @@ npm install
 cp .env.example .env
 ```
 
-In `.env`, set `SPEAKER_KEY` and replace the two placeholders, `PUBLIC_URL` and `SHORT_URL` (see
+In `.env`, replace the three placeholders, `SPEAKER_KEY`, `PUBLIC_URL` and `SHORT_URL` (see
 [Configuration](#configuration)). Then:
 
 ```bash
@@ -84,15 +84,16 @@ variable.
 | Variable | Default | Purpose |
 |---|---|---|
 | `PORT` | `3000` | Port for every surface |
-| `SPEAKER_KEY` | required | Gates the console, facilitator view and notes view |
+| `SPEAKER_KEY` | required | Gates the console, facilitator view, notes view and export. The server refuses to start when it is empty or still the placeholder |
 | `PUBLIC_URL` | `http://<lan-ip>:<port>` | Where the QR code points. A path in it (`https://host/talk`) makes the app serve itself under that prefix |
 | `BASE_PATH` | the path of `PUBLIC_URL` | Overrides the prefix, for a proxy that strips it before forwarding |
 | `SHORT_URL` | the site root | Text printed under the QR code only; the QR code still encodes `PUBLIC_URL` |
 | `SLIDES_DIR` | `slides/` | Folder of slide images |
 
-**`PUBLIC_URL` and `SHORT_URL` must be updated.** `.env.example` ships them as placeholders,
-`https://YOUR-PUBLIC-HOST` and `YOUR-SHORT-LINK`, and the server refuses to start while either still
-holds its placeholder. Set `PUBLIC_URL` to the address the audience's devices will reach, or leave
+**`SPEAKER_KEY`, `PUBLIC_URL` and `SHORT_URL` must be updated.** `.env.example` ships them as
+placeholders, `CHOOSE-A-SECRET`, `https://YOUR-PUBLIC-HOST` and `YOUR-SHORT-LINK`, and the server
+refuses to start while any of them still holds its placeholder. Choose a long random speaker key;
+it is printed with the URLs only when the server runs on a terminal, never into captured logs. Set `PUBLIC_URL` to the address the audience's devices will reach, or leave
 it empty to use the LAN address, which only works when every device is on the same network. Set
 `SHORT_URL` to your own short link, or leave it empty to print the site root.
 | `NOTES_FILE` | `notes/speaker-notes.md` | Speaker notes, one per run sheet step |

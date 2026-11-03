@@ -1443,7 +1443,7 @@ reopened. Export files on disk are kept.
 
 ```text
 PORT              default 3000
-SPEAKER_KEY       required; gates the console, facilitator view and notes view
+SPEAKER_KEY       required; gates the console, facilitator view, notes view and export; the server refuses the placeholder
 PUBLIC_URL        default http://<lan-ip>:<port>; the QR code and join URL, and the base path when it has one
 SHORT_URL         optional; printed under the lobby QR code instead of the site root; display only
 BASE_PATH         default: the path of PUBLIC_URL; the prefix the app serves under (a Route path); set / behind a proxy that strips it
@@ -1460,9 +1460,10 @@ LLM_TIMEOUT_MS    default 8000
 ```
 
 `.env` is read once at startup. Without any `LLM_*` setting the renderer is deterministic.
-`.env.example` ships `PUBLIC_URL` and `SHORT_URL` as placeholders (`https://YOUR-PUBLIC-HOST`,
-`YOUR-SHORT-LINK`); the server refuses to start while either still holds its placeholder, so each
-must be set to your own value or cleared.
+`.env.example` ships `SPEAKER_KEY`, `PUBLIC_URL` and `SHORT_URL` as placeholders (`CHOOSE-A-SECRET`,
+`https://YOUR-PUBLIC-HOST`, `YOUR-SHORT-LINK`); the server refuses to start while any still holds
+its placeholder, so each must be set to your own value (or, for the URLs, cleared). The startup
+lines print the key only on a terminal; captured output gets `<SPEAKER_KEY>` instead.
 
 ## 28. State synchronization
 

@@ -16,7 +16,7 @@ reads `.env` and builds the `Dockerfile` from there.
 
 - `oc`, logged in to the cluster, and `git` (the image tag is the commit).
 - `podman`, only for a local build.
-- `SPEAKER_KEY`, in the environment or in `.env`, for the first deploy.
+- `SPEAKER_KEY`, in the environment or in `.env`, for the first deploy. The script rejects the placeholder from `.env.example`, and so does the pod.
 - For a cert-manager certificate only: cert-manager on the cluster (for example the cert-manager Operator for Red Hat
   OpenShift), and a Route API with `spec.tls.externalCertificate`. The script checks both and stops if either is
   missing; `oc explain route.spec.tls.externalCertificate` shows whether the cluster has it.
